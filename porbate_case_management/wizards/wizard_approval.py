@@ -37,7 +37,7 @@ class ReasonReject(models.TransientModel):
                 'suppervisor': rec.supervisor_id.name,
                 'message': self.remarks,
                 'user_id': self.env.user.name,
-                'company_id': self.env.company.id,
+                'company_id': self.env.company.name,
                 'action_url': action_url,
             }
             template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': rec.supervisor_id.email}, email_layout_xmlid='mail.mail_notification_light')
