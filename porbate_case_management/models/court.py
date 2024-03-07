@@ -21,15 +21,22 @@ class Disctrict(models.Model):
 
     court_id = fields.Many2one('probate.case.court', string='High Court')
     district_code = fields.Char('District Code')
-    branch_distric_ids = fields.One2many('probate.case.branch.district', 'district_id', string='Branch District')
+    branch_distric_ids = fields.One2many('probate.case.district.line', 'district_id', string='Branch District')
     status = fields.Boolean('Status')
     name = fields.Char('District Name')
 
+class DisctrictLine(models.Model):
+    _name = 'probate.case.district.line'
+    _description = 'Probate Case District'
+
+    district_id = fields.Many2one('probate.case.district', string='High Court')
+    branch_district_id = fields.Many2one('probate.case.branch.district', string='District')
+    branch_district_code = fields.Char('Branch District Code', related='branch_district_id.branch_district_code')
+    branch_district_name = fields.Char('Branch District Code', related='branch_district_id.name')
 class BranchDisctrict(models.Model):
     _name = 'probate.case.branch.district'
     _description = 'Probate Case Branch District'
 
-    district_id = fields.Many2one('probate.case.district', string='District')
     branch_district_code = fields.Char('Branch District Code')
     name = fields.Char('Branch District Name')
 
