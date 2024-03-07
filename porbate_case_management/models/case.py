@@ -39,7 +39,7 @@ class ProbateCase(models.Model):
         ('pending_hro_approval', 'Pending HRO approval'),
         ('pending_payment', 'Pending payment'),
         ('closed', 'Closed'),
-    ], string='state')
+    ], string='state', default='draft')
 
     @api.model_create_multi
     def create(self, vals_list):
