@@ -8,6 +8,7 @@
     'summary': 'Porbate Case Management - v1.0',
     'depends': ['base','contacts'],
     'data': [
+        'views/stage_view.xml',
         'views/user_court.xml',
         'data/position_user.xml',
         'views/district_view.xml',

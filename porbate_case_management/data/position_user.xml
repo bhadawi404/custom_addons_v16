@@ -29,6 +29,16 @@
         
     
     </data>
+
+    <data noupdate="1">
+        <record id="stage_new" model="probate.case.stage">
+            <field name="name">New</field>
+        </record>
+        <record id="stage_awaiting_for_tiss" model="probate.case.stage">
+            <field name="name">close</field>
+        </record>
+    
+    </data>
     
 
 </odoo>

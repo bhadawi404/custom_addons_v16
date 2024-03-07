@@ -5,5 +5,6 @@
         <menuitem id="menu_configuration_court" name="Court" parent="porbate_case_management.menu_configuration_root" sequence="1" action="porbate_case_management.court_action"/>
         <menuitem id="menu_configuration_branch_court" name="District" parent="porbate_case_management.menu_configuration_root" sequence="2" action="porbate_case_management.district_action"/>
         <menuitem id="menu_configuration_user_court" name="User Court" parent="porbate_case_management.menu_configuration_root" sequence="3" action="porbate_case_management.user_court_action"/>
+        <menuitem id="menu_configuration_stage_process" name="Stages" parent="porbate_case_management.menu_configuration_root" sequence="4" action="porbate_case_management.stage_action"/>
 
 </odoo>
