@@ -7,12 +7,20 @@ from odoo.tools.safe_eval import safe_eval
 class Court(models.Model):
     _name = 'probate.case.court'
     _description = 'Probate Case Court'
+ 
 
     court_code = fields.Char('Court Code')
     country_id = fields.Many2one('res.country', string='Country')
     state_id = fields.Many2one('res.country.state', string='State', domain="[('country_id', '=', country_id)]")
     name = fields.Char('Court Name')
     status = fields.Boolean('Status')
+
+    def name_get(self):
+        res = []
+        for rec in self:
+            name = f"[{rec.court_code}] - {rec.name}"
+            res.append((rec.id, name))
+        return res
 
 
 class Disctrict(models.Model):
@@ -40,6 +48,13 @@ class BranchDisctrict(models.Model):
     branch_district_code = fields.Char('Branch District Code')
     name = fields.Char('Branch District Name')
 
+    def name_get(self):
+        res = []
+        for rec in self:
+            name = f"[{rec.branch_district_code}] - {rec.name}"
+            res.append((rec.id, name))
+        return res
+    
 class PositionCourt(models.Model):
     _name = 'probate.case.position'
     _description = 'Probate Case Poition'

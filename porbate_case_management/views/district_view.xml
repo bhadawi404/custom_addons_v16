@@ -38,9 +38,8 @@
                         <page string="Branch District">
                             <field name="branch_distric_ids" widget="one2many_list">
                                 <tree editable="bottom">
-                                    <field name="branch_district_id" required="1"/>
-                                    <field name="branch_district_code" required="1"/>
-                                    <field name="branch_district_name" required="1"/>
+                                    <field name="branch_district_id" string="Branch District Name" required="1"/>
+                                    
                                 </tree>
                             </field>
                         </page>
