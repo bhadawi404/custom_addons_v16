@@ -23,7 +23,7 @@ class ReasonReject(models.TransientModel):
                     self.remarks
                 )
             )
-        sale_order.sudo().write({'state': 'completion_form'})
+        sale_order.sudo().write({'state': 'waiting_tiss'})
         for rec in sale_order:
             #Send Email
             action_url = '%s/web#id=%s&menu_id=%s&action=%s&model=probate.case&view_type=form' % (
