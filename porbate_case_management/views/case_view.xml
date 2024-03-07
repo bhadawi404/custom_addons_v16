@@ -42,7 +42,7 @@
                             <field name="branch_district_id" required="1"/>
                         </group>
                         <group name="detail_person" string="Detail Person">
-                            <field name="presiding_magistrate" required="1"/>
+                            <field name="presiding_magistrate" required="1" domain="[('position_id.position_name', '=', 'Hon. Presiding Magistrate Record Management Officer')]"/>
                             <field name="parties_involved" widget="many2many_tags"/>
                             <field name="beneficiaries" widget="many2many_tags"/>
                         </group>
