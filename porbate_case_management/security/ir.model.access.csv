@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_probate_case_court,access_probate_case_court,model_probate_case_court,,1,1,1,1
+access_probate_case_district,access_probate_case_district,model_probate_case_district,,1,1,1,1
+access_probate_case_branch_district,access_probate_case_branch_district,model_probate_case_branch_district,,1,1,1,1
+access_probate_case_position,access_probate_case_position,model_probate_case_position,,1,1,1,1

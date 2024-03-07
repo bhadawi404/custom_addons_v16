@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="position_hon_judge_incharge" model="probate.case.position">
+            <field name="position_name">Hon. Judge Incharge</field>
+        </record>
+        <record id="position_hon_deputy_registrar" model="probate.case.position">
+            <field name="position_name">Hon. Deputy Registrar</field>
+        </record>
+        <record id="position_hon_resident_magistrate_incharge" model="probate.case.position">
+            <field name="position_name">Hon. Resident Magistrate Incharge</field>
+        </record>
+        <record id="position_hon_district_resident_magistrate_incharge" model="probate.case.position">
+            <field name="position_name">Hon. District Resident Magistrate Incharge</field>
+        </record>
+        <record id="position_hon_presiding_magistrate_record_management_officer" model="probate.case.position">
+            <field name="position_name">Hon. Presiding Magistrate Record Management Officer</field>
+        </record>
+        <record id="position_administrator_administratix" model="probate.case.position">
+            <field name="position_name">Administrator/Administratix</field>
+        </record>
+        <record id="position_hro" model="probate.case.position">
+            <field name="position_name">HRO</field>
+        </record>
+        <record id="position_accountant" model="probate.case.position">
+            <field name="position_name">Accountant</field>
+        </record>
+        
+    
+    </data>
+    
+
+</odoo>

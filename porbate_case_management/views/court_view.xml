@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="court_view_tree" model="ir.ui.view">
+        <field name="name">court.view.tree</field>
+        <field name="model">probate.case.court</field>
+        <field name="arch" type="xml">
+            <tree string="High Court">
+                <field name="court_code" />
+                <field name="name" />
+                <field name="country_id" />
+                <field name="state_id" />
+                <field name="status" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="court_view_form" model="ir.ui.view">
+        <field name="name">court.view.form</field>
+        <field name="model">probate.case.court</field>
+        <field name="arch" type="xml">
+            <form string="High Court">
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Court Code</span>
+                        <h1>
+                            <field name="court_code" required="1"/>
+                        </h1>
+                        <span class="o_form_label">Court Name</span>
+                        <h2>
+                            <field name="name" required="1"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="country_id" required="1"/>
+                            <field name="state_id" required="1"/>
+                            <field name="status" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="court_view_search" model="ir.ui.view">
+        <field name="name">court.view.search</field>
+        <field name="model">probate.case.court</field>
+        <field name="arch" type="xml">
+            <search string="High Court">
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="name"/>
+                <field name="court_code"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="state" domain="[]" context="{'group_by':'state_id'}"/>
+                    <filter string="Country" name="country" domain="[]" context="{'group_by':'country_id'}"/>
+                    <filter string="Status" name="status" domain="[]" context="{'group_by':'status'}"/>
+                    
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="court_action" model="ir.actions.act_window">
+        <field name="name">High Court</field>
+        <field name="res_model">probate.case.court</field>
+        <field name="view_mode">tree,form,search</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>
