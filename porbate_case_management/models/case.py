@@ -105,8 +105,18 @@ class ProbateCase(models.Model):
 
     #             vals['name'] = code_district + '/' + code_branch_district + ' ' + str(sequence_number).zfill(2) + '/' + date_today
     #         return super().create(vals)
-
-
+    @api.onchange('court_id')
+    def _onchange_get_presiding_magistrate(self): 
+        res = {}
+        if self.court_id:
+            presiding_magistrate_ids = self.env['res.partner'].sudo().search([('position_id.position_name', '=', 'Hon. Presiding Magistrate Record Management Officer'),('court_ids','in', self.court_id.ids)])
+            list_presiding = [(pr.id) for pr in presiding_magistrate_ids]
+            res = {'domain': {'presiding_magistrate': [('id', 'in', list_presiding)]}}
+        else:
+            res = {'domain': {'presiding_magistrate': [('id', '=', False)]},
+               'value': {'presiding_magistrate': False}}
+        return res
+    
     def action_submit(self):
         self.write({'state': 'waiting_tiss'})
 

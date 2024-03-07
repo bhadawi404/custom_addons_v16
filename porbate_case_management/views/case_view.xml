@@ -46,7 +46,7 @@
                             <field name="branch_district_id" required="1"/>
                         </group>
                         <group name="detail_person" string="Detail Presiding Magistrate">
-                            <field name="presiding_magistrate" required="1" domain="[('position_id.position_name', '=', 'Hon. Presiding Magistrate Record Management Officer')]"/>
+                            <field name="presiding_magistrate" required="1" domain="[('position_id.position_name', '=', 'Hon. Presiding Magistrate Record Management Officer'), ('court_ids', 'in', [court_id])]"/>
                             <field name="phone" />
                             <field name="email" widget="email" />
                         </group>
