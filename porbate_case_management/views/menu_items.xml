@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_probate_case_root" name="Porbate Case" sequence="1"/>
+    <menuitem id="menu_probate_case_root" name="Probate Case Management" sequence="1"/>
     <menuitem id="menu_configuration_root" name="Configuration" parent="porbate_case_management.menu_probate_case_root" sequence="5"/>
         <menuitem id="menu_configuration_court" name="Court" parent="porbate_case_management.menu_configuration_root" sequence="1" action="porbate_case_management.court_action"/>
         <menuitem id="menu_configuration_branch_court" name="District" parent="porbate_case_management.menu_configuration_root" sequence="2" action="porbate_case_management.district_action"/>
