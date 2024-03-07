@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <menuitem id="menu_probate_case_root" name="Probate Case Management" sequence="1"/>
+    <menuitem id="menu_case_root" name="Case" parent="porbate_case_management.menu_probate_case_root" sequence="1" action="porbate_case_management.case_action"/>
     <menuitem id="menu_configuration_root" name="Configuration" parent="porbate_case_management.menu_probate_case_root" sequence="5"/>
         <menuitem id="menu_configuration_court" name="Court" parent="porbate_case_management.menu_configuration_root" sequence="1" action="porbate_case_management.court_action"/>
         <menuitem id="menu_configuration_district" name="District" parent="porbate_case_management.menu_configuration_root" sequence="2" action="porbate_case_management.district_action"/>
         <menuitem id="menu_configuration_branch_district" name="Branch District" parent="porbate_case_management.menu_configuration_root" sequence="3" action="porbate_case_management.branch_district_action"/>
         <menuitem id="menu_configuration_user_court" name="User Court" parent="porbate_case_management.menu_configuration_root" sequence="4" action="porbate_case_management.user_court_action"/>
-        <menuitem id="menu_configuration_stage_process" name="Stages" parent="porbate_case_management.menu_configuration_root" sequence="5" action="porbate_case_management.stage_action"/>
+        <!-- <menuitem id="menu_configuration_stage_process" name="Stages" parent="porbate_case_management.menu_configuration_root" sequence="5" action="porbate_case_management.stage_action"/> -->
 </odoo>

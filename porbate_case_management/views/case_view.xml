@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="case_view_tree" model="ir.ui.view">
+        <field name="name">case.view.tree</field>
+        <field name="model">probate.case</field>
+        <field name="arch" type="xml">
+            <tree string="Case">
+                <field name="name" />
+                <field name="court_id" />
+                <field name="district_id" />
+                <field name="branch_district_id" />
+                <field name="presiding_magistrate" />
+                <field name="parties_involved" widget="many2many_tags"/>
+                <field name="beneficiaries" widget="many2many_tags"/>
+                <field name="administrator_name" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="case_view_form" model="ir.ui.view">
+        <field name="name">case.view.form</field>
+        <field name="model">probate.case</field>
+        <field name="arch" type="xml">
+            <form string="Case">
+                <header>
+                    <button string="Submit" name="action_submit" type="object" class="oe_highlight" state="draft"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,waiting_tiss,completion_form,pending_hro_approval,pending_payment,closed" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <span class="o_form_label">Case Number</span>
+                        <h1>
+                            <field name="name" required="1" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="detail_court" string="Detail Court">
+                            <field name="court_id" required="1"/>
+                            <field name="district_id" required="1"/>
+                            <field name="branch_district_id" required="1"/>
+                        </group>
+                        <group name="detail_person" string="Detail Person">
+                            <field name="presiding_magistrate" required="1"/>
+                            <field name="parties_involved" widget="many2many_tags"/>
+                            <field name="beneficiaries" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <group name="other_detail" string="Other Detail">
+                        <field name="administrator_name" />
+                        <field name="deceased_name" />
+                        <field name="completion_date" />
+                        <field name="administrator_phone" />
+                    </group>
+                    <notebook>
+                        <page string="Property Cash">
+                            <field name="case_property_ids" widget="one2many_list">
+                                <tree editable="bottom">
+                                    <field name="type_properties" required="1"/>
+                                    <field name="name" required="1"/>
+                                    <field name="value" required="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="total">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="total_value" widget='monetary' options="{'currency_field': 'currency_id'}" nolabel="1" colspan="2" readonly="1"/>
+                            </group>
+                            <div class="clearfix"/>
+                        </page>
+                    </notebook>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="case_action" model="ir.actions.act_window">
+        <field name="name">Case</field>
+        <field name="res_model">probate.case</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+
+</odoo>

@@ -5,3 +5,5 @@ access_probate_case_district_line,access_probate_case_district_line,model_probat
 access_probate_case_branch_district,access_probate_case_branch_district,model_probate_case_branch_district,,1,1,1,1
 access_probate_case_position,access_probate_case_position,model_probate_case_position,,1,1,1,1
 access_probate_case_stage,access_probate_case_stage,model_probate_case_stage,,1,1,1,1
+access_probate_case,access_probate_case,model_probate_case,,1,1,1,1
+access_probate_case_property,access_probate_case_property,model_probate_case_property,,1,1,1,1
