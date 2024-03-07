@@ -25,8 +25,13 @@
         <field name="arch" type="xml">
             <form string="Case">
                 <header>
-                    <button string="Submit" name="action_submit" type="object" class="oe_highlight" state="draft"/>
+                    <field name="show_button_confirm_for_supervisor" invisible="1"/>
+                    <button string="Submit" name="action_submit" type="object" class="oe_highlight" states="draft"/>
+                    <button string="Confirm" name="action_confirm" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_supervisor', '=', False)]}"/>
+                    <button string="Approved" states="completion_form" name="action_approved_completion_form" type="object" class="btn-primary"/>
+                    <button string="Reject" states="completion_form" name="action_reject_not_completion_form" type="object"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,waiting_tiss,completion_form,pending_hro_approval,pending_payment,closed" readonly="1"/>
+                    
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -46,9 +51,11 @@
                             <field name="branch_district_id" required="1"/>
                         </group>
                         <group name="detail_person" string="Detail Presiding Magistrate">
-                            <field name="presiding_magistrate" required="1" domain="[('position_id.position_name', '=', 'Hon. Presiding Magistrate Record Management Officer'), ('court_ids', 'in', [court_id])]"/>
+                            <field name="presiding_magistrate" required="1"/>
                             <field name="phone" />
                             <field name="email" widget="email" />
+                            <field name="supervisor_id"/>
+                            <field name="email_supervisor" required="1"/>
                         </group>
                     </group>
                     <group name="other_detail" string="Other Detail">

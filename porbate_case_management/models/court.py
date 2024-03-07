@@ -64,7 +64,7 @@ class PositionCourt(models.Model):
     position_name = fields.Char('Position Name')
 
 class CourtUser(models.Model):
-    _inherit = 'res.partner'
+    _inherit = 'res.users'
 
+    
     court_ids = fields.Many2many('probate.case.court', string='Court')
-    position_id = fields.Many2one('probate.case.position', string='Position')

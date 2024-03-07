@@ -38,7 +38,7 @@ class ProbateCase(models.Model):
     court_id = fields.Many2one('probate.case.court', string='Court Name')
     district_id = fields.Many2one('probate.case.district', string='District')
     branch_district_id = fields.Many2one('probate.case.branch.district', string='Branch District')
-    presiding_magistrate = fields.Many2one('res.partner', string='Presiding Magistrate')
+    presiding_magistrate = fields.Many2one('res.users', string='Presiding Magistrate')
     phone = fields.Char('Phone', related='presiding_magistrate.phone')
     email = fields.Char('Email', related='presiding_magistrate.email')
     parties_involved = fields.One2many('probate.case.parties', 'case_id', string='Parties Involved', ondelete='cascade')
@@ -58,7 +58,44 @@ class ProbateCase(models.Model):
         ('pending_hro_approval', 'Pending HRO approval'),
         ('pending_payment', 'Pending payment'),
         ('closed', 'Closed'),
-    ], string='state', default='draft')
+    ], string='state', default='draft', tracking=True)
+    supervisor_id = fields.Many2one('res.users', string='Supervisor')
+    email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
+    show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
+    
+    def action_approved_completion_form(self):
+        self.write({'state': 'pending_hro_approval'})
+    
+    def action_reject_not_completion_form(self):
+        form_view_id = self.env.ref('porbate_case_management.reject_approval').id
+        action =  {
+            'name': _('Reason Reject'),
+            'view_mode': 'form',
+            'res_model': 'reason.reject',
+            'view_id': form_view_id,
+            'views': [(form_view_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+        return action
+
+    def _show_button_confirm_suppervisor(self):
+        for record in self:
+            if record.state == 'waiting_tiss':
+                if record.env.user.id == record.supervisor_id.id:
+                    record.show_button_confirm_for_supervisor = True
+                else:
+                    record.show_button_confirm_for_supervisor = False
+            else:
+                record.show_button_confirm_for_supervisor = False
+
+    def action_confirm(self):
+        self.write({'state': 'completion_form'})
+        now = fields.date.today()
+        date_string = now.strftime('%d-%m-%Y')
+        message = f"{self.administrator_name.name} has been assigned by {self.env.user.name} on {date_string} "
+        self.message_post(body=message)
+        
 
     @api.depends('case_number', 'district_id', 'branch_district_id')
     def _get_system_number(self):
@@ -79,37 +116,12 @@ class ProbateCase(models.Model):
                 record.update({
                     'name': sequence,
                 })
-    # @api.model_create_multi
-    # def create(self, vals_list):
-    #     for vals in vals_list:
-    #         if vals.get('name', 'New Case') == 'New Case':
-    #             date = fields.Date.today()
-    #             code_district = self.env['probate.case.district'].search([('id','=', int(vals.get('district_id')))]).district_code
-    #             code_branch_district = self.env['probate.case.branch.district'].search([('id','=', int(vals.get('branch_district_id')))]).branch_district_code
-    #             date_today = date.strftime('%d/%m/%Y')
-                
-    #             pattern = code_district + '/' + code_branch_district + ' ' + '%' + '/' + date_today
-    #             last_seq_number_rec = self.env['probate.case'].sudo().search([
-    #                     ('name', 'like', pattern)
-    #                 ], order='id desc', limit=1)
-
-    #             if last_seq_number_rec and last_seq_number_rec.name:
-    #                 last_seq_number_match = re.search(r'\s(\d{2})/', last_seq_number_rec.name)
-    #                 if last_seq_number_match:
-    #                     last_seq_number = int(last_seq_number_match.group(1))
-    #                     sequence_number = last_seq_number + 1
-    #                 else:
-    #                     sequence_number = 1
-    #             else:
-    #                 sequence_number = 1
-
-    #             vals['name'] = code_district + '/' + code_branch_district + ' ' + str(sequence_number).zfill(2) + '/' + date_today
-    #         return super().create(vals)
+    
     @api.onchange('court_id')
     def _onchange_get_presiding_magistrate(self): 
         res = {}
         if self.court_id:
-            presiding_magistrate_ids = self.env['res.partner'].sudo().search([('position_id.position_name', '=', 'Hon. Presiding Magistrate Record Management Officer'),('court_ids','in', self.court_id.ids)])
+            presiding_magistrate_ids = self.env['res.users'].sudo().search([('court_ids','in', self.court_id.ids)])
             list_presiding = [(pr.id) for pr in presiding_magistrate_ids]
             res = {'domain': {'presiding_magistrate': [('id', 'in', list_presiding)]}}
         else:
@@ -119,6 +131,10 @@ class ProbateCase(models.Model):
     
     def action_submit(self):
         self.write({'state': 'waiting_tiss'})
+        now = fields.date.today()
+        date_string = now.strftime('%d-%m-%Y')
+        message = f"{self.supervisor_id.name} has been assigned by {self.env.user.name} on {date_string} "
+        self.message_post(body=message)
 
     @api.depends('company_id')
     def _compute_currency_id(self):

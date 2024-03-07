@@ -35,7 +35,7 @@
             <field name="name">New</field>
         </record>
         <record id="stage_awaiting_for_tiss" model="probate.case.stage">
-            <field name="name">close</field>
+            <field name="name">Close</field>
         </record>
     
     </data>
