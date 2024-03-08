@@ -84,6 +84,7 @@ class ProbateCase(models.Model):
     accounting_id = fields.Many2one('res.users', string='Accounting')
     email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
+    property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value')
 
     def action_upload_document(self):
         form_view_id = self.env.ref('porbate_case_management.upload_document_view_form').id
@@ -188,6 +189,13 @@ class ProbateCase(models.Model):
 
     def action_approve_hro(self):
         self.write({'state': 'pending_payment'})
+        value_list = []
+        for rec in self.case_property_ids:
+            value_list.append({
+                'property_id': rec.id,
+                'case_id': rec.case_id.id
+            })
+        create_property_value = self.env['probate.case.property.value'].sudo().create(value_list)
 
     def action_reject_hro(self):
         form_view_hro = self.env.ref('porbate_case_management.reject_approval_hro').id
@@ -306,7 +314,7 @@ class ProbateCase(models.Model):
                     'total_value': currency.round(total_value),
                 })
 
-class ProbateCase(models.Model):
+class ProbateCaseProperty(models.Model):
     _name = 'probate.case.property'
 
     case_id = fields.Many2one('probate.case', string='case')
@@ -316,5 +324,19 @@ class ProbateCase(models.Model):
     ], string='Type Properties', required="1")
     name = fields.Char('Detail')
     value = fields.Float('Value')
+    paid = fields.Float('Paid')
+    balance = fields.Float('Balance')
+
+class ProbateCasePropertyValue(models.Model):
+    _name = 'probate.case.property.value'
+
+    case_id = fields.Many2one('probate.case', string='case')
+    property_id = fields.Many2one('probate.case.property', string='Property')
+    type_properties = fields.Selection([
+        ('land', 'Land'),
+        ('cash', 'Cash'),
+    ], string='Type Properties', related='property_id.type_properties')
+    name = fields.Char('Detail', related='property_id.name')
+    value = fields.Float('Value', related='property_id.value')
     paid = fields.Float('Paid')
     balance = fields.Float('Balance')

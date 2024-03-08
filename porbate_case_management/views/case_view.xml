@@ -87,7 +87,7 @@
                         <field name="administrator_phone" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                     </group>
                     <notebook>
-                        <page string="Property Cash">
+                        <page name="property" string="Property Cash">
                             <field name="case_property_ids" widget="one2many_list" attrs="{'readonly': [('state', '!=', 'draft')]}">
                                 <tree editable="bottom">
                                     <field name="type_properties" required="1"/>
@@ -140,7 +140,7 @@
                             </field>
                         </page>
                         <page name="paid_value" string="Property Paid Value">
-                            <field name="case_property_ids" widget="one2many_list" readonly="1" options="{'no_open':True}">
+                            <field name="property_value_ids" widget="one2many_list" readonly="1" options="{'no_open':True}">
                                 <tree editable="bottom" create="false" edit="false" delete="false" >
                                     <field name="type_properties" readonly="1"/>
                                     <field name="name" readonly="1"/>
