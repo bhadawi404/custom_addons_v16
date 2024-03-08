@@ -86,6 +86,9 @@ class ProbateCase(models.Model):
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value')
 
+    def action_back_to_draft(self):
+        self.write({'state': 'draft'})
+
     def action_upload_document(self):
         form_view_id = self.env.ref('porbate_case_management.upload_document_view_form').id
         list_property = []
@@ -126,7 +129,7 @@ class ProbateCase(models.Model):
             'target': 'new',
         }
         return action
-
+    
     #STAGE AWAITING TISS
     def _show_button_confirm_suppervisor(self):
         for record in self:
@@ -191,12 +194,19 @@ class ProbateCase(models.Model):
         self.write({'state': 'pending_payment'})
         value_list = []
         for rec in self.case_property_ids:
-            value_list.append({
-                'property_id': rec.id,
-                'case_id': rec.case_id.id
-            })
-        create_property_value = self.env['probate.case.property.value'].sudo().create(value_list)
-
+            property_value = self.env['probate.case.property.value'].sudo().search([('property_id','=',rec.id)])
+            if not property_value:
+                value_list.append({
+                    'property_id': rec.id,
+                    'case_id': rec.case_id.id
+                })
+                create_property_value = self.env['probate.case.property.value'].sudo().create(value_list)
+            else:
+                for value in property_value:
+                    value.sudo().write({
+                        'case_id': value.case_id.id
+                    })
+                
     def action_reject_hro(self):
         form_view_hro = self.env.ref('porbate_case_management.reject_approval_hro').id
         action =  {
@@ -243,8 +253,18 @@ class ProbateCase(models.Model):
     def action_pay(self):
         pass
 
-    def action_reject_to_hro(self):
-        pass
+    def action_reject_payment(self):
+        form_view_payment = self.env.ref('porbate_case_management.reject_approval_payment').id
+        action =  {
+            'name': _('Reason Reject'),
+            'view_mode': 'form',
+            'res_model': 'reason.reject.payment',
+            'view_id': form_view_payment,
+            'views': [(form_view_payment, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+        return action
     
     def closed_case(self):
         self.write({'state': 'closed'})

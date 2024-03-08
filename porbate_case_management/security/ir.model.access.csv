@@ -16,4 +16,5 @@ access_probate_case_form,access_probate_case_form,model_probate_case_form,,1,1,1
 access_form_upload,access_form_upload,model_form_upload,,1,1,1,1
 access_reason_reject_hro,access_reason_reject_hro,model_reason_reject_hro,,1,1,1,1
 access_payment_beneficaries,access_payment_beneficaries,model_payment_beneficaries,,1,1,1,1
-access_probate_case_property_value,access_probate_case_property_value,model_probate_case_property_value,,1,1,1,1
+access_probate_case_property_value,access_probate_case_property_value,model_probate_case_property_value,,1,1,1,
+access_reason_reject_payment,access_reason_reject_payment,model_reason_reject_payment,,1,1,1,1
