@@ -28,6 +28,16 @@ class Parties(models.Model):
     email = fields.Char('Email')
     phone = fields.Char('Phone')
 
+class PaymentBeneficiaries(models.Model):
+    _name = 'payment.beneficaries'
+
+    case_id = fields.Many2one('probate.case', string='case')
+    beneficiaries_id = fields.Many2one('probate.case.beneficiaries', string='Beneficiaries Details')
+    property_id = fields.Many2one('probate.case.property', string='Case Inventory')
+    amount = fields.Float('Amount')
+    remarks = fields.Text('Remarks')
+
+
 class ProbateCase(models.Model):
     _name = 'probate.case'
     _description = 'Probate Case'
@@ -70,7 +80,10 @@ class ProbateCase(models.Model):
     hro_approval = fields.Many2one('res.users', string='HRO Approval')
     email_hro = fields.Char(string='HRO Email', related='hro_approval.email')
     show_button_confirm_for_hro = fields.Boolean('show_button_confirm_for_hro', compute='_show_button_confirm_hro')
-
+    show_button_confirm_for_payment = fields.Boolean('show_button_confirm_for_payment', compute='_show_button_confirm_payment')
+    accounting_id = fields.Many2one('res.users', string='Accounting')
+    email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
+    payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
 
     def action_upload_document(self):
         form_view_id = self.env.ref('porbate_case_management.upload_document_view_form').id
@@ -207,6 +220,26 @@ class ProbateCase(models.Model):
         }
         }
         return action
+    
+    #STAGE PAYMENT
+    def _show_button_confirm_payment(self):
+        for record in self:
+            if record.state == 'pending_payment':
+                if record.env.user.id == record.accounting_id.id:
+                    record.show_button_confirm_for_payment = True
+                else:
+                    record.show_button_confirm_for_payment = False
+            else:
+                record.show_button_confirm_for_payment = False
+    
+    def action_pay(self):
+        pass
+
+    def action_reject_to_hro(self):
+        pass
+    
+    def closed_case(self):
+        self.write({'state': 'closed'})
 
     def action_confirm(self):
         self.write({'state': 'completion_form'})
@@ -283,3 +316,5 @@ class ProbateCase(models.Model):
     ], string='Type Properties', required="1")
     name = fields.Char('Detail')
     value = fields.Float('Value')
+    paid = fields.Float('Paid')
+    balance = fields.Float('Balance')
