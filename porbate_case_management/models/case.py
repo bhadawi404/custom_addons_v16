@@ -62,7 +62,23 @@ class ProbateCase(models.Model):
     supervisor_id = fields.Many2one('res.users', string='Supervisor')
     email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
     show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
+    show_button_upload_document = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document')
+    document_ids = fields.One2many('probate.case.document', 'case_id', string='document')
+
+    def action_upload_document(self):
+        form_view_id = self.env.ref('porbate_case_management.upload_document_view_form').id
+        action =  {
+            'name': _('Upload Document'),
+            'view_mode': 'form',
+            'res_model': 'document.upload',
+            'view_id': form_view_id,
+            'views': [(form_view_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+        return action
     
+
     def action_approved_completion_form(self):
         self.write({'state': 'pending_hro_approval'})
     
@@ -82,12 +98,25 @@ class ProbateCase(models.Model):
     def _show_button_confirm_suppervisor(self):
         for record in self:
             if record.state == 'waiting_tiss':
-                if record.env.user.id == record.supervisor_id.id:
-                    record.show_button_confirm_for_supervisor = True
+                if record.document_ids:
+                    if record.env.user.id == record.supervisor_id.id:
+                        record.show_button_confirm_for_supervisor = True
+                    else:
+                        record.show_button_confirm_for_supervisor = False
                 else:
                     record.show_button_confirm_for_supervisor = False
             else:
                 record.show_button_confirm_for_supervisor = False
+    
+    def _show_button_upload_document(self):
+        for record in self:
+            if record.state == 'waiting_tiss':
+                if record.env.user.id == record.supervisor_id.id:
+                    record.show_button_upload_document = True
+                else:
+                    record.show_button_upload_document = False
+            else:
+                record.show_button_upload_document = False
 
     def action_confirm(self):
         self.write({'state': 'completion_form'})

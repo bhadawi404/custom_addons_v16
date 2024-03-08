@@ -26,8 +26,10 @@
             <form string="Case">
                 <header>
                     <field name="show_button_confirm_for_supervisor" invisible="1"/>
+                    <field name="show_button_upload_document" invisible="1" />
                     <button string="Submit" name="action_submit" type="object" class="oe_highlight" states="draft"/>
                     <button string="Confirm" name="action_confirm" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_supervisor', '=', False)]}"/>
+                    <button string="Upload Document" name="action_upload_document" type="object" class="oe_highlight" attrs="{'invisible': [('show_button_upload_document', '=', False)]}"/>
                     <button string="Approved" states="completion_form" name="action_approved_completion_form" type="object" class="btn-primary"/>
                     <button string="Reject" states="completion_form" name="action_reject_not_completion_form" type="object"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,waiting_tiss,completion_form,pending_hro_approval,pending_payment,closed" readonly="1"/>
@@ -94,6 +96,15 @@
                                     <field name="name" required="1"/>
                                     <field name="phone" />
                                     <field name="email" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="attachment" string="Attachment" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="document_ids" widget="one2many_list" attrs="{'readonly': [('show_button_confirm_for_supervisor', '=', False)]}">
+                                <tree editable="bottom" create="false">
+                                    <field name="name" required="1"/>
+                                    <field name="description" />
+                                    <field name="attachment" />
                                 </tree>
                             </field>
                         </page>

@@ -10,3 +10,5 @@ access_probate_case_property,access_probate_case_property,model_probate_case_pro
 access_probate_case_parties,access_probate_case_parties,model_probate_case_parties,,1,1,1,1
 access_probate_case_beneficiaries,access_probate_case_beneficiaries,model_probate_case_beneficiaries,,1,1,1,1
 access_reason_reject,access_reason_reject,model_reason_reject,,1,1,1,1
+access_probate_case_document,access_probate_case_document,model_probate_case_document,,1,1,1,1
+access_document_upload,access_document_upload,model_document_upload,,1,1,1,1
