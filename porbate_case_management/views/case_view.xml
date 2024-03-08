@@ -75,9 +75,9 @@
                             <field name="email" widget="email" />
                             <field name="supervisor_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             <field name="email_supervisor" required="1"/>
-                            <field name="hro_approval" required="1"/>
+                            <field name="hro_approval" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             <field name="email_hro" />
-                            <field name="accounting_id" required="1"/>
+                            <field name="accounting_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             <field name="email_accounting" />
                         </group>
                     </group>
@@ -146,8 +146,8 @@
                                     <field name="type_properties" readonly="1"/>
                                     <field name="name" readonly="1"/>
                                     <field name="value" readonly="1"/>
-                                    <field name="paid" readonly="1" />
-                                    <field name="balance" readonly="1" />
+                                    <field name="paid" readonly="1" sum="Total Paid"/>
+                                    <field name="balance" readonly="1" sum="Total Balance"/>
                                 </tree>
                             </field>
                         </page>
