@@ -119,7 +119,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page name="attachment" string="Tiss Attachment" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <page name="attachment" string="Tiss Attachment">
                             <field name="document_ids" widget="one2many_list" attrs="{'readonly': [('show_button_confirm_for_supervisor', '=', False)]}">
                                 <tree editable="bottom" create="false">
                                     <field name="name" required="1"/>
@@ -129,7 +129,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page name="form_attachment" string="Form Attachment" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <page name="form_attachment" string="Form Attachment">
                             <field name="form_ids" widget="one2many_list" attrs="{'readonly': [('show_button_confirm_for_administrator', '=', False)]}">
                                 <tree editable="bottom" create="false">
                                     <field name="name" required="1"/>
@@ -139,7 +139,7 @@
                                 </tree>
                             </field>
                         </page>
-                        <page name="paid_value" string="Property Paid Value" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <page name="paid_value" string="Property Paid Value">
                             <field name="case_property_ids" widget="one2many_list" readonly="1" options="{'no_open':True}">
                                 <tree editable="bottom" create="false" edit="false" delete="false" >
                                     <field name="type_properties" readonly="1"/>
