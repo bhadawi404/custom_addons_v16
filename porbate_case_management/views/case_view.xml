@@ -25,13 +25,24 @@
         <field name="arch" type="xml">
             <form string="Case">
                 <header>
+                    <!--Stage 1-->
+                    <button string="Submit" name="action_submit" type="object" class="oe_highlight" states="draft"/>
+                    <!--Stage 2-->
                     <field name="show_button_confirm_for_supervisor" invisible="1"/>
                     <field name="show_button_upload_document" invisible="1" />
-                    <button string="Submit" name="action_submit" type="object" class="oe_highlight" states="draft"/>
                     <button string="Confirm" name="action_confirm" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_supervisor', '=', False)]}"/>
                     <button string="Upload Document" name="action_upload_document" type="object" class="oe_highlight" attrs="{'invisible': [('show_button_upload_document', '=', False)]}"/>
-                    <button string="Approved" states="completion_form" name="action_approved_completion_form" type="object" class="btn-primary"/>
-                    <button string="Reject" states="completion_form" name="action_reject_not_completion_form" type="object"/>
+                    <!--Stage 3-->
+                    <field name="show_button_confirm_for_administrator" invisible="1"/>
+                    <field name="show_button_upload_document_administrator" invisible="1" />
+                    <button string="Completed" name="complete_form_attachment" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_administrator', '=', False)]}"/>
+                    <button string="Upload Form Attachment" name="action_upload_form" type="object" class="oe_highlight" attrs="{'invisible': [('show_button_upload_document_administrator', '=', False)]}"/>
+                    <button string="Send back to Supervisor" states="completion_form" name="action_reject_not_completion_form" type="object"/>
+                    <!--Stage 4-->
+                    <field name="show_button_confirm_for_hro" invisible="1" />
+                    <button string="Approve" name="action_approve_hro" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_hro', '=', False)]}"/>
+                    <button string="Reject" states="reject_hro" name="action_reject_hro" type="object" attrs="{'invisible': [('show_button_confirm_for_hro', '=', False)]}"/>
+
                     <field name="state" widget="statusbar" statusbar_visible="draft,waiting_tiss,completion_form,pending_hro_approval,pending_payment,closed" readonly="1"/>
                     
                 </header>
@@ -39,7 +50,7 @@
                     <div class="oe_title">
                         <span class="o_form_label">Case Number</span>
                         <h1>
-                            <field name="case_number" required="1"/>
+                            <field name="case_number" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                         </h1>
                         <span class="o_form_label">System Case Number</span>
                         <h1>
@@ -48,27 +59,29 @@
                     </div>
                     <group>
                         <group name="detail_court" string="Detail Court">
-                            <field name="court_id" required="1"/>
-                            <field name="district_id" required="1"/>
-                            <field name="branch_district_id" required="1"/>
+                            <field name="court_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="district_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="branch_district_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                         </group>
                         <group name="detail_person" string="Detail Presiding Magistrate">
-                            <field name="presiding_magistrate" required="1"/>
+                            <field name="presiding_magistrate" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             <field name="phone" />
                             <field name="email" widget="email" />
-                            <field name="supervisor_id"/>
+                            <field name="supervisor_id" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             <field name="email_supervisor" required="1"/>
+                            <field name="hro_approval" required="1"/>
+                            <field name="email_hro" />
                         </group>
                     </group>
                     <group name="other_detail" string="Other Detail">
-                        <field name="administrator_name" />
-                        <field name="deceased_name" />
-                        <field name="completion_date" />
-                        <field name="administrator_phone" />
+                        <field name="administrator_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="deceased_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="completion_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="administrator_phone" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                     </group>
                     <notebook>
                         <page string="Property Cash">
-                            <field name="case_property_ids" widget="one2many_list">
+                            <field name="case_property_ids" widget="one2many_list" attrs="{'readonly': [('state', '!=', 'draft')]}">
                                 <tree editable="bottom">
                                     <field name="type_properties" required="1"/>
                                     <field name="name" required="1"/>
@@ -82,7 +95,7 @@
                             <div class="clearfix"/>
                         </page>
                         <page name="parties_involved" string="Parties to the metter">
-                            <field name="parties_involved" widget="one2many_list">
+                            <field name="parties_involved" widget="one2many_list" attrs="{'readonly': [('state', '!=', 'draft')]}">
                                 <tree editable="bottom">
                                     <field name="name" required="1"/>
                                     <field name="phone" />
@@ -91,7 +104,7 @@
                             </field>
                         </page>
                         <page name="beneficiaries" string="Name Of Beneficaries">
-                            <field name="beneficiaries" widget="one2many_list">
+                            <field name="beneficiaries" widget="one2many_list" attrs="{'readonly': [('state', '!=', 'draft')]}">
                                 <tree editable="bottom">
                                     <field name="name" required="1"/>
                                     <field name="phone" />
@@ -99,10 +112,21 @@
                                 </tree>
                             </field>
                         </page>
-                        <page name="attachment" string="Attachment" attrs="{'invisible': [('state', '=', 'draft')]}">
+                        <page name="attachment" string="Tiss Attachment" attrs="{'invisible': [('state', '=', 'draft')]}">
                             <field name="document_ids" widget="one2many_list" attrs="{'readonly': [('show_button_confirm_for_supervisor', '=', False)]}">
                                 <tree editable="bottom" create="false">
                                     <field name="name" required="1"/>
+                                    <field name="property_id"/>
+                                    <field name="description" />
+                                    <field name="attachment" />
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="form_attachment" string="Form Attachment" attrs="{'invisible': [('state', '=', 'draft')]}">
+                            <field name="form_ids" widget="one2many_list" attrs="{'readonly': [('show_button_confirm_for_administrator', '=', False)]}">
+                                <tree editable="bottom" create="false">
+                                    <field name="name" required="1"/>
+                                    <field name="form_type"/>
                                     <field name="description" />
                                     <field name="attachment" />
                                 </tree>

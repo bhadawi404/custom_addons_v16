@@ -64,9 +64,24 @@ class ProbateCase(models.Model):
     show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
     show_button_upload_document = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document')
     document_ids = fields.One2many('probate.case.document', 'case_id', string='document')
+    form_ids = fields.One2many('probate.case.form', 'case_id', string='form')
+    show_button_confirm_for_administrator = fields.Boolean('show_button_confirm_for_administrator', compute='_show_button_confirm_administrator')
+    show_button_upload_document_administrator = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document_administrator')
+    hro_approval = fields.Many2one('res.users', string='HRO Approval')
+    email_hro = fields.Char(string='HRO Email', related='hro_approval.email')
+    show_button_confirm_for_hro = fields.Boolean('show_button_confirm_for_hro', compute='_show_button_confirm_hro')
+
 
     def action_upload_document(self):
         form_view_id = self.env.ref('porbate_case_management.upload_document_view_form').id
+        list_property = []
+        property = self.env['probate.case.property'].search([('case_id','=', self.id)])
+        for record in property:
+            validation_in_document = self.env['probate.case.document'].search([('property_id','=', record.id)])
+            if validation_in_document:
+                continue
+            else:
+                list_property.append(record.id)
         action =  {
             'name': _('Upload Document'),
             'view_mode': 'form',
@@ -75,12 +90,15 @@ class ProbateCase(models.Model):
             'views': [(form_view_id, 'form')],
             'type': 'ir.actions.act_window',
             'target': 'new',
+            'context': {
+            'default_name': self.name,
+            'default_detail_property_id': list_property
+        }
         }
         return action
     
 
-    def action_approved_completion_form(self):
-        self.write({'state': 'pending_hro_approval'})
+
     
     def action_reject_not_completion_form(self):
         form_view_id = self.env.ref('porbate_case_management.reject_approval').id
@@ -95,6 +113,7 @@ class ProbateCase(models.Model):
         }
         return action
 
+    #STAGE AWAITING TISS
     def _show_button_confirm_suppervisor(self):
         for record in self:
             if record.state == 'waiting_tiss':
@@ -117,6 +136,77 @@ class ProbateCase(models.Model):
                     record.show_button_upload_document = False
             else:
                 record.show_button_upload_document = False
+
+    
+    #STAGE COMPLETION FORM
+    def _show_button_confirm_administrator(self):
+        for record in self:
+            if record.state == 'completion_form':
+                if record.form_ids:
+                    if record.env.user.id == record.administrator_name.id:
+                        record.show_button_confirm_for_administrator = True
+                    else:
+                        record.show_button_confirm_for_administrator = False
+                else:
+                    record.show_button_confirm_for_administrator = False
+            else:
+                record.show_button_confirm_for_administrator = False
+    
+    def _show_button_upload_document_administrator(self):
+        for record in self:
+            if record.state == 'completion_form':
+                if record.env.user.id == record.administrator_name.id:
+                    record.show_button_upload_document_administrator = True
+                else:
+                    record.show_button_upload_document_administrator = False
+            else:
+                record.show_button_upload_document_administrator = False
+
+    #STAGE APPROVAL HRO
+    def _show_button_confirm_hro(self):
+        for record in self:
+            if record.state == 'pending_hro_approval':
+                if record.env.user.id == record.hro_approval.id:
+                    record.show_button_confirm_for_hro = True
+                else:
+                    record.show_button_confirm_for_hro = False
+            else:
+                record.show_button_confirm_for_hro = False
+
+    def action_approve_hro(self):
+        self.write({'state': 'pending_payment'})
+
+    def action_reject_hro(self):
+        form_view_hro = self.env.ref('porbate_case_management.reject_approval_hro').id
+        action =  {
+            'name': _('Reason Reject'),
+            'view_mode': 'form',
+            'res_model': 'reason.reject.hro',
+            'view_id': form_view_hro,
+            'views': [(form_view_hro, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+        return action
+
+    def complete_form_attachment(self):
+        self.write({'state': 'pending_hro_approval'})
+
+    def action_upload_form(self):
+        form_view_id = self.env.ref('porbate_case_management.upload_form_view_form').id
+        action =  {
+            'name': _('Upload Form'),
+            'view_mode': 'form',
+            'res_model': 'form.upload',
+            'view_id': form_view_id,
+            'views': [(form_view_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {
+            'default_name': self.name,
+        }
+        }
+        return action
 
     def action_confirm(self):
         self.write({'state': 'completion_form'})

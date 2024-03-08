@@ -9,12 +9,34 @@
                 <sheet>
                     <group>
                         <field name="name" />
+                        <field name="detail_property_id" domain="[('id','=',context.get('default_detail_property_id'))]"/>
                         <field name="description" />
                         <field name="attachment" />
                     </group>
                 </sheet>
                 <footer>
                     <button name="action_upload" string="Submit" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="upload_form_view_form" model="ir.ui.view">
+        <field name="name">upload_form.view.form</field>
+        <field name="model">form.upload</field>
+        <field name="arch" type="xml">
+            <form string="Form Upload">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="form_type" />
+                        <field name="description" />
+                        <field name="attachment" />
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_upload_form" string="Submit" type="object" class="btn-primary" data-hotkey="q"/>
                     <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
                 </footer>
             </form>

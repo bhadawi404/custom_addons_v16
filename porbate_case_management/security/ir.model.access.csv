@@ -12,3 +12,6 @@ access_probate_case_beneficiaries,access_probate_case_beneficiaries,model_probat
 access_reason_reject,access_reason_reject,model_reason_reject,,1,1,1,1
 access_probate_case_document,access_probate_case_document,model_probate_case_document,,1,1,1,1
 access_document_upload,access_document_upload,model_document_upload,,1,1,1,1
+access_probate_case_form,access_probate_case_form,model_probate_case_form,,1,1,1,1
+access_form_upload,access_form_upload,model_form_upload,,1,1,1,1
+access_reason_reject_hro,access_reason_reject_hro,model_reason_reject_hro,,1,1,1,1
