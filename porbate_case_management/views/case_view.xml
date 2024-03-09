@@ -156,7 +156,7 @@
                                 <tree editable="bottom" create="false">
                                     <field name="beneficiaries_id"/>
                                     <field name="property_id"/>
-                                    <field name="amount"/>
+                                    <field name="amount" sum="Total Amount"/>
                                     <field name="remarks"/>
                                 </tree>
                             </field>

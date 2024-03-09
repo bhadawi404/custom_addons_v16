@@ -18,3 +18,4 @@ access_reason_reject_hro,access_reason_reject_hro,model_reason_reject_hro,,1,1,1
 access_payment_beneficaries,access_payment_beneficaries,model_payment_beneficaries,,1,1,1,1
 access_probate_case_property_value,access_probate_case_property_value,model_probate_case_property_value,,1,1,1,
 access_reason_reject_payment,access_reason_reject_payment,model_reason_reject_payment,,1,1,1,1
+access_payment_beneficaries_wizard,access_payment_beneficaries_wizard,model_payment_beneficaries_wizard,,1,1,1,1

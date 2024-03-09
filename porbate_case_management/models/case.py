@@ -31,6 +31,7 @@ class Parties(models.Model):
 class PaymentBeneficiaries(models.Model):
     _name = 'payment.beneficaries'
 
+    date_payment = fields.Date('Payment Date')
     case_id = fields.Many2one('probate.case', string='case')
     beneficiaries_id = fields.Many2one('probate.case.beneficiaries', string='Beneficiaries Details')
     property_id = fields.Many2one('probate.case.property', string='Case Inventory')
@@ -192,19 +193,19 @@ class ProbateCase(models.Model):
 
     def action_approve_hro(self):
         self.write({'state': 'pending_payment'})
-        value_list = []
         for rec in self.case_property_ids:
             property_value = self.env['probate.case.property.value'].sudo().search([('property_id','=',rec.id)])
             if not property_value:
-                value_list.append({
+                vals = {
                     'property_id': rec.id,
                     'case_id': rec.case_id.id
-                })
-                create_property_value = self.env['probate.case.property.value'].sudo().create(value_list)
+                }
+                create_property_value = self.env['probate.case.property.value'].sudo().create(vals)
             else:
                 for value in property_value:
                     value.sudo().write({
-                        'case_id': value.case_id.id
+                        'case_id': rec.case_id.id,
+                        'property_id': rec.id
                     })
                 
     def action_reject_hro(self):
@@ -251,7 +252,21 @@ class ProbateCase(models.Model):
                 record.show_button_confirm_for_payment = False
     
     def action_pay(self):
-        pass
+        form_view_create_payment = self.env.ref('porbate_case_management.payment_view_form').id
+        action =  {
+            'name': _('Create Payment'),
+            'view_mode': 'form',
+            'res_model': 'payment.beneficaries.wizard',
+            'view_id': form_view_create_payment,
+            'views': [(form_view_create_payment, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {
+                'default_case_id': self.id,
+            }
+            
+        }
+        return action
 
     def action_reject_payment(self):
         form_view_payment = self.env.ref('porbate_case_management.reject_approval_payment').id
@@ -359,4 +374,8 @@ class ProbateCasePropertyValue(models.Model):
     name = fields.Char('Detail', related='property_id.name')
     value = fields.Float('Value', related='property_id.value')
     paid = fields.Float('Paid')
-    balance = fields.Float('Balance')
+    balance = fields.Float('Balance', compute='_get_balance')
+
+    def _get_balance(self):
+        for rec in self:
+            rec.balance = rec.value - rec.paid

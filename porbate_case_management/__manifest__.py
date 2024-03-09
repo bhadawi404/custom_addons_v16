@@ -8,11 +8,11 @@
     'summary': 'Porbate Case Management - v1.0',
     'depends': ['base','contacts'],
     'data': [
+        'wizards/wizard_payment_view.xml',
         'wizards/wizard_upload_document_view.xml',
         'data/email_reject.xml',
         'wizards/wizard_approval_view.xml',
         'views/case_view.xml',
-        # 'views/stage_view.xml',
         'views/user_court.xml',
         'data/position_user.xml',
         'views/district_view.xml',

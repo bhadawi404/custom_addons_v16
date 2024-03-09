@@ -9,7 +9,7 @@
                 <sheet>
                     <group>
                         <field name="name" />
-                        <field name="detail_property_id" domain="[('id','=',context.get('default_detail_property_id'))]"/>
+                        <field name="detail_property_id" domain="[('id','=',context.get('default_detail_property_id'))]" required="1"/>
                         <field name="description" />
                         <field name="attachment" />
                     </group>
