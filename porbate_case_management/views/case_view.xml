@@ -154,6 +154,7 @@
                         <page name="beneficiaries" string="Property Paid Of Beneficaries">
                             <field name="payment_beneficaries_ids" widget="one2many_list" attrs="{'readonly': [('show_button_confirm_for_payment', '=', False)]}">
                                 <tree editable="bottom" create="false" edit="false" delete="false">
+                                    <field name="date_payment"/>
                                     <field name="beneficiaries_id"/>
                                     <field name="property_id"/>
                                     <field name="amount" sum="Total Amount"/>
