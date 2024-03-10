@@ -69,7 +69,7 @@ class ProbateCase(models.Model):
         ('pending_hro_approval', 'Pending HRO approval'),
         ('pending_payment', 'Pending payment'),
         ('closed', 'Closed'),
-    ], string='state', default='draft', tracking=True)
+    ], string='State', default='draft', tracking=True)
     supervisor_id = fields.Many2one('res.users', string='Supervisor')
     email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
     show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
