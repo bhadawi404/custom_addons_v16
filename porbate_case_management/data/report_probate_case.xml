@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    
+
+    <template id="report_probate_case">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h1>
+                                <u>PROBATE CASE</u>
+                            </h1>
+                            <h2>
+                                <t t-esc="o.name" />
+                            </h2>
+                        </div>
+                        <br />
+
+                        <!-- Company Detail -->
+                        <div class="header-content mt-4"
+                            style="text-align: justify; margin: 40px; padding: 8px;">
+                            <p class="m-0" style="white-space: nowrap;"><strong>Court Name:</strong>      <span t-field="o.court_id.name"/></p>
+                            <p class="m-0" style="white-space: nowrap;"><strong>District: </strong>       <span t-field="o.district_id.name"/></p>
+                            <p class="m-0" style="white-space: nowrap;"><strong>Branch District: </strong><span t-field="o.branch_district_id.name"/></p>
+                            <p class="m-0" style="white-space: nowrap;"><strong>Deceased Name: </strong>  <span t-field="o.deceased_name"/></p>
+                        </div>
+                        <!-- End Company Detail -->
+
+                        
+                        
+                        <div t-if="o.case_property_ids"
+                            style="text-align: justify; margin: 40px; padding: 8px;">
+                            <b class="m-0" style="white-space: nowrap;">Property Cash :</b>
+                            <!-- Table -->
+                            <table class="table table-bordered"
+                                style="border-color: black; margin: 0 auto;">
+                                <thead>
+                                    <tr>
+                                        <th name="th_description" class="text-center">
+                                            <strong>Type Property</strong>
+                                        </th>
+                                        <th name="th_amount" class="text-center">
+                                            <strong>Detail</strong>
+                                        </th>
+                                        <th name="th_value" class="text-center">
+                                            <strong>Value</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.case_property_ids" t-as="property">
+                                    <tr>
+                                        <td class="text-center">
+                                            <span t-esc="property['type_properties']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="property['name']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="property['value']"/>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div t-if="o.parties_involved"
+                            style="text-align: justify; margin: 40px; padding: 8px;">
+                            <b class="m-0" style="white-space: nowrap;">Parties to the metter :</b>
+                            <!-- Table -->
+                            <table class="table table-bordered"
+                                style="border-color: black; margin: 0 auto;">
+                                <thead>
+                                    <tr>
+                                        <th name="th_description" class="text-center">
+                                            <strong>Name</strong>
+                                        </th>
+                                        <th name="th_amount" class="text-center">
+                                            <strong>Phone</strong>
+                                        </th>
+                                        <th name="th_value" class="text-center">
+                                            <strong>Email</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.parties_involved" t-as="involved">
+                                    <tr>
+                                        <td class="text-center">
+                                            <span t-esc="involved['name']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="involved['phone']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="involved['email']"/>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div t-if="o.beneficiaries"
+                            style="text-align: justify; margin: 40px; padding: 8px;">
+                            <b class="m-0" style="white-space: nowrap;">Name Of Beneficaries :</b>
+                            <!-- Table -->
+                            <table class="table table-bordered"
+                                style="border-color: black; margin: 0 auto;">
+                                <thead>
+                                    <tr>
+                                        <th name="th_description" class="text-center">
+                                            <strong>Name</strong>
+                                        </th>
+                                        <th name="th_amount" class="text-center">
+                                            <strong>Phone</strong>
+                                        </th>
+                                        <th name="th_value" class="text-center">
+                                            <strong>Email</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.beneficiaries" t-as="beneficiaries">
+                                    <tr>
+                                        <td class="text-center">
+                                            <span t-esc="beneficiaries['name']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="beneficiaries['phone']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="beneficiaries['email']"/>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div t-if="o.property_value_ids"
+                            style="text-align: justify; margin: 40px; padding: 8px;">
+                            <b class="m-0" style="white-space: nowrap;">Property Paid Value : </b>
+                            <!-- Table -->
+                            <table class="table table-bordered"
+                                style="border-color: black; margin: 0 auto;">
+                                <thead>
+                                    <tr>
+                                        <th name="th_description" class="text-center">
+                                            <strong>Type Property</strong>
+                                        </th>
+                                        <th name="th_amount" class="text-center">
+                                            <strong>Detail</strong>
+                                        </th>
+                                        <th name="th_value" class="text-center">
+                                            <strong>Value</strong>
+                                        </th>
+                                        <th name="th_paid" class="text-center">
+                                            <strong>Paid</strong>
+                                        </th>
+                                        <th name="th_paid" class="text-center">
+                                            <strong>Balance</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.property_value_ids" t-as="p_value">
+                                    <tr>
+                                        <td class="text-center">
+                                            <span t-esc="p_value['type_properties']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="p_value['name']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="p_value['value']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="p_value['paid']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="p_value['balance']"/>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div t-if="o.payment_beneficaries_ids"
+                            style="text-align: justify; margin: 40px; padding: 8px;">
+                            <b class="m-0" style="white-space: nowrap;">Property Paid Of Beneficaries : </b>
+                            <!-- Table -->
+                            <table class="table table-bordered"
+                                style="border-color: black; margin: 0 auto;">
+                                <thead>
+                                    <tr>
+                                        <th name="th_description" class="text-center">
+                                            <strong>Payment Date</strong>
+                                        </th>
+                                        <th name="th_amount" class="text-center">
+                                            <strong>Beneficaries Detail</strong>
+                                        </th>
+                                        <th name="th_value" class="text-center">
+                                            <strong>Case Inventory</strong>
+                                        </th>
+                                        <th name="th_paid" class="text-center">
+                                            <strong>Amount</strong>
+                                        </th>
+                                        <th name="th_paid" class="text-center">
+                                            <strong>Remarks</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.payment_beneficaries_ids" t-as="payment">
+                                    <tr>
+                                        <td class="text-center">
+                                            <span t-esc="payment['date_payment']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="payment['beneficaries_name']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="payment['property_name']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="payment['amount']"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-esc="payment['remarks']"/>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <table border="0" width='100%' height="10%"> 
+                            <tr>
+                                <td class="text-center" style="border-color: black; padding: 4px;" width="33%">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p class="m-0" style="white-space: nowrap;">___________________</p>
+                                    <t t-esc="o.supervisor_id.name" />
+                                    <p class="m-0" style="white-space: nowrap;">Dated: <span
+                                        t-field="o.approve_date_supervisor" t-options='{"format": "dd/MM/yyyy"}' /></p>
+                                </td>
+                                <td class="text-center" style="border-color: black; padding: 4px;" width="33%">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p class="m-0" style="white-space: nowrap;">___________________</p>
+                                    <t t-esc="o.administrator_name.name" />
+                                    <p class="m-0" style="white-space: nowrap;">Dated: <span
+                                        t-field="o.approve_date_administrator" t-options='{"format": "dd/MM/yyyy"}' /></p>
+                                </td>
+                                <td class="text-center" style="border-color: black; padding: 4px;" width="34%">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p class="m-0" style="white-space: nowrap;">___________________</p>
+                                    <t t-esc="o.hro_approval.name" />
+                                    <p class="m-0" style="white-space: nowrap;">Dated: <span
+                                        t-field="o.approve_date_hro" t-options='{"format": "dd/MM/yyyy"}' /></p>
+                                </td>
+                                <td class="text-center" style="border-color: black; padding: 4px;" width="34%">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <p class="m-0" style="white-space: nowrap;">___________________</p>
+                                    <t t-esc="o.accounting_id.name" />
+                                    <p class="m-0" style="white-space: nowrap;">Dated: <span
+                                        t-field="o.approve_date_accounting" t-options='{"format": "dd/MM/yyyy"}' /></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="print_probate_case">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="porbate_case_management.report_probate_case" t-lang="o.env.lang"/>
+        </t>
+    </template>
+    <data>
+        <record id="action_print_probate_case" model="ir.actions.report">
+            <field name="name">Probate Case</field>
+            <field name="model">probate.case</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">porbate_case_management.print_probate_case</field>
+            <field name="report_file">porbate_case_management.print_probate_case</field>
+            <field name="print_report_name">'Probate Case'</field>
+            <field name="binding_model_id" ref="model_probate_case" />
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+    
+    
+
+</odoo>

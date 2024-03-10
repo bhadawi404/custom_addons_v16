@@ -38,7 +38,8 @@ class PaymentBeneficiaries(models.Model):
     property_id = fields.Many2one('probate.case.property', string='Case Inventory')
     amount = fields.Float('Amount')
     remarks = fields.Text('Remarks')
-
+    beneficaries_name = fields.Char('beneficaries_name', related='beneficiaries_id.name')
+    property_name = fields.Char('property_name', related='property_id.name')
 
 class ProbateCase(models.Model):
     _name = 'probate.case'
@@ -87,6 +88,14 @@ class ProbateCase(models.Model):
     email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
+
+    #APPROVAL DATE
+    approve_date_supervisor = fields.Date('Approved Supervisor')
+    approve_date_administrator = fields.Date('Approved Administrator')
+    approve_date_hro = fields.Date('Approved HRO')
+    approve_date_accounting = fields.Date('Approved Accounting')
+
+
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_done_or_cancel(self):
@@ -197,7 +206,8 @@ class ProbateCase(models.Model):
         return action
     
     def action_confirm(self):
-        self.write({'state': 'completion_form'})
+        now = fields.date.today()
+        self.write({'state': 'completion_form','approve_date_supervisor': now})
         self.send_email_notification(stage='completion_form')
         # now = fields.date.today()
         # date_string = now.strftime('%d-%m-%Y')
@@ -244,7 +254,8 @@ class ProbateCase(models.Model):
         return action
     
     def complete_form_attachment(self):
-        self.write({'state': 'pending_hro_approval'})
+        now = fields.date.today()
+        self.write({'state': 'pending_hro_approval','approve_date_administrator': now})
         self.send_email_notification(stage='pending_hro_approval')
 
     def action_upload_form(self):
@@ -276,7 +287,8 @@ class ProbateCase(models.Model):
                 record.show_button_confirm_for_hro = False
 
     def action_approve_hro(self):
-        self.write({'state': 'pending_payment'})
+        now = fields.date.today()
+        self.write({'state': 'pending_payment','approve_date_hro': now})
         for rec in self.case_property_ids:
             property_value = self.env['probate.case.property.value'].sudo().search([('property_id','=',rec.id)])
             if not property_value:
@@ -349,7 +361,8 @@ class ProbateCase(models.Model):
         return action
     
     def closed_case(self):
-        self.write({'state': 'closed'})
+        now = fields.date.today()
+        self.write({'state': 'closed','approve_date_accounting': now})
         self.send_email_notification(stage='closed')
         
 

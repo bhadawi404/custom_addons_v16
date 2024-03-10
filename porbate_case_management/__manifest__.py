@@ -8,6 +8,7 @@
     'summary': 'Porbate Case Management - v1.0',
     'depends': ['base','contacts'],
     'data': [
+        'data/report_probate_case.xml',
         'wizards/wizard_payment_view.xml',
         'wizards/wizard_upload_document_view.xml',
         'data/email_reject.xml',
