@@ -3,6 +3,7 @@
 from odoo import fields, models,api,_
 from odoo.tools.safe_eval import safe_eval
 import re
+from odoo.exceptions import UserError, ValidationError
 
 class CaseStage(models.Model):
     _name = 'probate.case.stage'
@@ -54,7 +55,7 @@ class ProbateCase(models.Model):
     email = fields.Char('Email', related='presiding_magistrate.email')
     parties_involved = fields.One2many('probate.case.parties', 'case_id', string='Parties Involved', ondelete='cascade')
     beneficiaries = fields.One2many('probate.case.beneficiaries', 'case_id', string='Beneficiaries', ondelete='cascade')
-    case_property_ids = fields.One2many('probate.case.property', 'case_id', string='Properties', ondelete="cascade")
+    case_property_ids = fields.One2many('probate.case.property', 'case_id', string='Properties', ondelete='cascade')
     administrator_name = fields.Many2one('res.users', string='Name of the Administrator of the estate', default=lambda self: self.env.user,)
     deceased_name = fields.Char(string='Deceased Name')
     completion_date = fields.Date(string='Completion Date')
@@ -74,8 +75,8 @@ class ProbateCase(models.Model):
     email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
     show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
     show_button_upload_document = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document')
-    document_ids = fields.One2many('probate.case.document', 'case_id', string='document')
-    form_ids = fields.One2many('probate.case.form', 'case_id', string='form')
+    document_ids = fields.One2many('probate.case.document', 'case_id', string='document',ondelete='cascade')
+    form_ids = fields.One2many('probate.case.form', 'case_id', string='form',ondelete='cascade')
     show_button_confirm_for_administrator = fields.Boolean('show_button_confirm_for_administrator', compute='_show_button_confirm_administrator')
     show_button_upload_document_administrator = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document_administrator')
     hro_approval = fields.Many2one('res.users', string='HRO Approval')
@@ -85,8 +86,13 @@ class ProbateCase(models.Model):
     accounting_id = fields.Many2one('res.users', string='Accounting')
     email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
-    property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value')
+    property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_done_or_cancel(self):
+        for ml in self:
+            if ml.state!='draft':
+                raise UserError(_("Sorry, You can't delete Case(s) that has already been processed"))
 
     def send_email_notification(self, stage=None):
         if stage == 'waiting_tiss':
