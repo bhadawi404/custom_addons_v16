@@ -87,8 +87,83 @@ class ProbateCase(models.Model):
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value')
 
+
+    def send_email_notification(self, stage=None):
+        if stage == 'waiting_tiss':
+            to = self.supervisor_id.name
+            email_to = self.supervisor_id.email
+            message = f"You have been assigned to complete the Tiss Attachment Stage to the Case Number : {self.name}"
+        if stage == 'completion_form':
+            to = self.administrator_name.name
+            email_to = self.administrator_name.email
+            message = f"You have been assigned to complete the Form Attachment Stage to the Case Number : {self.name}"
+        if stage == 'pending_hro_approval':
+            to = self.hro_approval.name
+            email_to = self.hro_approval.email
+            message = f"You have been assigned to complete the approval for Case Number: {self.name}"
+        if stage == 'pending_payment':
+            to = self.accounting_id.name
+            email_to = self.accounting_id.email
+            message = f"You have been assigned to complete the payment management of Case: {self.name}"
+        if stage == 'closed':
+            to = 'All'
+            email_to = [self.supervisor_id.partner_id.id,self.administrator_name.partner_id.id,self.accounting_id.partner_id.id]
+            message = f"All tasks have been completed and the case: This {self.name} has been closed "
+        for rec in self:
+            #Send Email
+            action_url = '%s/web#id=%s&menu_id=%s&action=%s&model=probate.case&view_type=form' % (
+                self.get_base_url(),
+                rec.id,
+                self.env.ref('porbate_case_management.menu_case_root').id,
+                self.env.ref('porbate_case_management.case_action').id,
+            )
+            template_approval = self.env.ref('porbate_case_management.email_assign_task', raise_if_not_found=False)
+            template_context = {
+                'to': to,
+                'message': message,
+                'company_id': self.env.company.name,
+                'action_url': action_url,
+            }
+            if rec.state == 'closed':
+                template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'recipient_ids': email_to}, email_layout_xmlid='mail.mail_notification_light')
+            else:
+                template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': email_to}, email_layout_xmlid='mail.mail_notification_light')
+    #STAGE SUBMIT
+    def action_submit(self):
+        self.write({'state': 'waiting_tiss'})
+        self.send_email_notification(stage='waiting_tiss')
+        # now = fields.date.today()
+        # date_string = now.strftime('%d-%m-%Y')
+        # message = f"{self.supervisor_id.name} has been assigned by {self.env.user.name} on {date_string} "
+        # self.message_post(body=message)
+
     def action_back_to_draft(self):
         self.write({'state': 'draft'})
+    
+    
+    #STAGE AWAITING TISS
+    def _show_button_confirm_suppervisor(self):
+        for record in self:
+            if record.state == 'waiting_tiss':
+                if record.document_ids:
+                    if record.env.user.id == record.supervisor_id.id:
+                        record.show_button_confirm_for_supervisor = True
+                    else:
+                        record.show_button_confirm_for_supervisor = False
+                else:
+                    record.show_button_confirm_for_supervisor = False
+            else:
+                record.show_button_confirm_for_supervisor = False
+    
+    def _show_button_upload_document(self):
+        for record in self:
+            if record.state == 'waiting_tiss':
+                if record.env.user.id == record.supervisor_id.id:
+                    record.show_button_upload_document = True
+                else:
+                    record.show_button_upload_document = False
+            else:
+                record.show_button_upload_document = False
 
     def action_upload_document(self):
         form_view_id = self.env.ref('porbate_case_management.upload_document_view_form').id
@@ -115,45 +190,14 @@ class ProbateCase(models.Model):
         }
         return action
     
-
-
+    def action_confirm(self):
+        self.write({'state': 'completion_form'})
+        self.send_email_notification(stage='completion_form')
+        # now = fields.date.today()
+        # date_string = now.strftime('%d-%m-%Y')
+        # message = f"{self.administrator_name.name} has been assigned by {self.env.user.name} on {date_string} "
+        # self.message_post(body=message)
     
-    def action_reject_not_completion_form(self):
-        form_view_id = self.env.ref('porbate_case_management.reject_approval').id
-        action =  {
-            'name': _('Reason Reject'),
-            'view_mode': 'form',
-            'res_model': 'reason.reject',
-            'view_id': form_view_id,
-            'views': [(form_view_id, 'form')],
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-        }
-        return action
-    
-    #STAGE AWAITING TISS
-    def _show_button_confirm_suppervisor(self):
-        for record in self:
-            if record.state == 'waiting_tiss':
-                if record.document_ids:
-                    if record.env.user.id == record.supervisor_id.id:
-                        record.show_button_confirm_for_supervisor = True
-                    else:
-                        record.show_button_confirm_for_supervisor = False
-                else:
-                    record.show_button_confirm_for_supervisor = False
-            else:
-                record.show_button_confirm_for_supervisor = False
-    
-    def _show_button_upload_document(self):
-        for record in self:
-            if record.state == 'waiting_tiss':
-                if record.env.user.id == record.supervisor_id.id:
-                    record.show_button_upload_document = True
-                else:
-                    record.show_button_upload_document = False
-            else:
-                record.show_button_upload_document = False
 
     
     #STAGE COMPLETION FORM
@@ -179,6 +223,40 @@ class ProbateCase(models.Model):
                     record.show_button_upload_document_administrator = False
             else:
                 record.show_button_upload_document_administrator = False
+
+    def action_reject_not_completion_form(self):
+        form_view_id = self.env.ref('porbate_case_management.reject_approval').id
+        action =  {
+            'name': _('Reason Reject'),
+            'view_mode': 'form',
+            'res_model': 'reason.reject',
+            'view_id': form_view_id,
+            'views': [(form_view_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+        return action
+    
+    def complete_form_attachment(self):
+        self.write({'state': 'pending_hro_approval'})
+        self.send_email_notification(stage='pending_hro_approval')
+
+    def action_upload_form(self):
+        form_view_id = self.env.ref('porbate_case_management.upload_form_view_form').id
+        action =  {
+            'name': _('Upload Form'),
+            'view_mode': 'form',
+            'res_model': 'form.upload',
+            'view_id': form_view_id,
+            'views': [(form_view_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {
+            'default_name': self.name,
+        }
+        }
+        return action
+    
 
     #STAGE APPROVAL HRO
     def _show_button_confirm_hro(self):
@@ -207,6 +285,7 @@ class ProbateCase(models.Model):
                         'case_id': rec.case_id.id,
                         'property_id': rec.id
                     })
+        self.send_email_notification(stage='pending_payment') 
                 
     def action_reject_hro(self):
         form_view_hro = self.env.ref('porbate_case_management.reject_approval_hro').id
@@ -221,24 +300,6 @@ class ProbateCase(models.Model):
         }
         return action
 
-    def complete_form_attachment(self):
-        self.write({'state': 'pending_hro_approval'})
-
-    def action_upload_form(self):
-        form_view_id = self.env.ref('porbate_case_management.upload_form_view_form').id
-        action =  {
-            'name': _('Upload Form'),
-            'view_mode': 'form',
-            'res_model': 'form.upload',
-            'view_id': form_view_id,
-            'views': [(form_view_id, 'form')],
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'context': {
-            'default_name': self.name,
-        }
-        }
-        return action
     
     #STAGE PAYMENT
     def _show_button_confirm_payment(self):
@@ -283,13 +344,7 @@ class ProbateCase(models.Model):
     
     def closed_case(self):
         self.write({'state': 'closed'})
-
-    def action_confirm(self):
-        self.write({'state': 'completion_form'})
-        now = fields.date.today()
-        date_string = now.strftime('%d-%m-%Y')
-        message = f"{self.administrator_name.name} has been assigned by {self.env.user.name} on {date_string} "
-        self.message_post(body=message)
+        self.send_email_notification(stage='closed')
         
 
     @api.depends('case_number', 'district_id', 'branch_district_id')
@@ -324,12 +379,6 @@ class ProbateCase(models.Model):
                'value': {'presiding_magistrate': False}}
         return res
     
-    def action_submit(self):
-        self.write({'state': 'waiting_tiss'})
-        now = fields.date.today()
-        date_string = now.strftime('%d-%m-%Y')
-        message = f"{self.supervisor_id.name} has been assigned by {self.env.user.name} on {date_string} "
-        self.message_post(body=message)
 
     @api.depends('company_id')
     def _compute_currency_id(self):
