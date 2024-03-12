@@ -57,7 +57,8 @@ class ProbateCase(models.Model):
     parties_involved = fields.One2many('probate.case.parties', 'case_id', string='Parties Involved', ondelete='cascade')
     beneficiaries = fields.One2many('probate.case.beneficiaries', 'case_id', string='Beneficiaries', ondelete='cascade')
     case_property_ids = fields.One2many('probate.case.property', 'case_id', string='Properties', ondelete='cascade')
-    administrator_name = fields.Many2one('res.users', string='Name of the Administrator of the estate', default=lambda self: self.env.user,)
+    administrator_name = fields.Many2one('res.users', string='User Clerk', default=lambda self: self.env.user,)
+    email_clerk = fields.Char('Clerk email', related='administrator_name.email')
     deceased_name = fields.Char(string='Deceased Name')
     completion_date = fields.Date(string='Completion Date')
     administrator_phone = fields.Char(string='Administrators phone number')
@@ -95,7 +96,7 @@ class ProbateCase(models.Model):
     approve_date_hro = fields.Date('Approved HRO')
     approve_date_accounting = fields.Date('Approved Accounting')
 
-
+    administrator_of_state = fields.Char('Name of the Administrator of the estate')
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_done_or_cancel(self):

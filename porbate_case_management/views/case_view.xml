@@ -81,10 +81,12 @@
                             <field name="email_hro" />
                             <field name="accounting_id" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                             <field name="email_accounting" />
+                            <field name="administrator_name" string="Clerk" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="email_clerk" />
                         </group>
                     </group>
                     <group name="other_detail" string="Other Detail">
-                        <field name="administrator_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="administrator_of_state" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                         <field name="deceased_name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                         <field name="completion_date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                         <field name="administrator_phone" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
