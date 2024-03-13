@@ -181,8 +181,9 @@
         <field name="name">zen.sale.view.kanban</field>
         <field name="model">probate.case</field>
         <field name="arch" type="xml">
-            <kanban class="o_kanban_mobile" create="0" edit="0" records_draggable="0" default_group_by="state">
-                    <field name="id" />    
+            <kanban class="o_kanban_mobile" quick_create="false" edit="false" records_draggable="0" default_group_by="state">
+                    <field name="state" />   
+                    <field name="id" />   
                     <field name="name" />
                     <field name="court_id" />
                     <field name="district_id" />
@@ -191,7 +192,6 @@
                     <field name="parties_involved" widget="many2many_tags"/>
                     <field name="beneficiaries" widget="many2many_tags"/>
                     <field name="administrator_name" />
-                    <field name="state" />
                     <field name="currency_id"/>
                     <field name="total_value"/>
 					<templates>
@@ -234,7 +234,7 @@
 								</div>
                                 <div class="o_kanban_record_bottom">
 									<div class="oe_kanban_bottom_right" title="State">
-										<field name="state" widget="label_selection" options="{'classes': {'new': 'info', 'cancel': 'danger', 'approved': 'primary', 'done': 'success'}}"/>
+										<field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'waiting_tiss': 'info', 'completion_form': 'primary', 'pending_payment': 'danger', 'pending_hro_approval': 'danger', 'closed': 'success'}}"/>
 									</div>
 								</div>
 							</div>
