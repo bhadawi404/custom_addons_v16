@@ -152,6 +152,7 @@
                                     <field name="value" readonly="1"/>
                                     <field name="paid" readonly="1" sum="Total Paid"/>
                                     <field name="balance" readonly="1" sum="Total Balance"/>
+                                    <field name="state" widget="badge" decoration-danger="state == 'pending_payment'" decoration-warning="state == 'partial'" decoration-success="state == 'paid'"/>
                                 </tree>
                             </field>
                         </page>

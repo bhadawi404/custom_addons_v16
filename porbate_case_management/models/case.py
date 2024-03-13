@@ -447,6 +447,24 @@ class ProbateCasePropertyValue(models.Model):
     value = fields.Float('Value', related='property_id.value')
     paid = fields.Float('Paid')
     balance = fields.Float('Balance', compute='_get_balance')
+    state = fields.Selection([
+        ('pending_payment', 'Pending Payment'),
+        ('paid', 'Paid'),
+        ('partial', 'Partial Payment'),
+        
+    ], string='Payment State', compute='_compute_state')
+    
+    @api.depends('value','balance','paid')
+    def _compute_state(self):
+        for rec in self:
+            if rec.paid == 0:
+                rec.update({'state': 'pending_payment'})
+                rec.state = 'pending_payment'
+            elif rec.paid != rec.value:
+                rec.update({'state': 'partial'})
+                rec.state = 'partial'
+            elif rec.balance == 0:
+                rec.update({'state': 'paid'})
 
     def _get_balance(self):
         for rec in self:
