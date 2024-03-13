@@ -87,7 +87,7 @@ class ProbateCase(models.Model):
     show_button_confirm_for_payment = fields.Boolean('show_button_confirm_for_payment', compute='_show_button_confirm_payment')
     accounting_id = fields.Many2one('res.users', string='Accounting')
     email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
-    payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
+    payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries',ondelete='cascade')
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
 
     #APPROVAL DATE
