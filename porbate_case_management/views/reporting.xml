@@ -133,7 +133,6 @@
                 <group expand="0" string="Group by...">
                     <filter name="group_by_case" context="{'group_by':'case_id'}"/>
                     <filter name="group_by_property_id" context="{'group_by':'property_id'}"/>
-                    <filter name="group_by_type_properties" context="{'group_by':'type_properties'}"/>
                     <filter name="group_by_state" context="{'group_by':'state'}"/>
                 </group>
             </search>

@@ -452,7 +452,7 @@ class ProbateCasePropertyValue(models.Model):
         ('paid', 'Paid'),
         ('partial', 'Partial Payment'),
         
-    ], string='Payment State', compute='_compute_state')
+    ], string='Payment State', compute='_compute_state', store=True)
     
     @api.depends('value','balance','paid')
     def _compute_state(self):
