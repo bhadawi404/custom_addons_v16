@@ -5,7 +5,7 @@
     <!--Reporting-->
     <menuitem id="menu_reporting" name="Reporting" parent="porbate_case_management.menu_probate_case_root" sequence="2"/>
         <menuitem id="menu_reporting_beneficaries" name="Report Beneficaries" parent="porbate_case_management.menu_reporting" sequence="1" action="porbate_case_management.reporting_beneficaries_action"/>
-        <menuitem id="menu_reporting_pending_tiss" name="Report Pending Tiss" parent="porbate_case_management.menu_reporting" sequence="2" action="porbate_case_management.reporting_beneficaries_action"/>
+        <menuitem id="menu_reporting_pending_tiss" name="Report Pending Tiss" parent="porbate_case_management.menu_reporting" sequence="2" action="porbate_case_management.reporting_pending_tiss_action"/>
 
         <!--End Reporting-->
     <menuitem id="menu_configuration_root" name="Configuration" parent="porbate_case_management.menu_probate_case_root" sequence="5"/>

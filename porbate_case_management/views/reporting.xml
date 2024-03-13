@@ -211,7 +211,7 @@
 				</kanban>
         </field>
     </record>
-    <record id="reporting_beneficaries_action" model="ir.actions.act_window">
+    <record id="reporting_pending_tiss_action" model="ir.actions.act_window">
         <field name="name">Report Pending Tiss</field>
         <field name="res_model">probate.case.property.value</field>
         <field name="view_mode">kanban,tree,search</field>
