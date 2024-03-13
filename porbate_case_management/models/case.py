@@ -91,6 +91,7 @@ class ProbateCase(models.Model):
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
 
     #APPROVAL DATE
+    approve_date_creator = fields.Date('Approved Created by')
     approve_date_supervisor = fields.Date('Approved Supervisor')
     approve_date_administrator = fields.Date('Approved Administrator')
     approve_date_hro = fields.Date('Approved HRO')
@@ -98,6 +99,32 @@ class ProbateCase(models.Model):
 
     administrator_of_state = fields.Char('Name of the Administrator of the estate')
 
+    def get_state_count(self):
+        """get the activity count details"""
+        activity = self.env['probate.case']
+        domain = []
+        # if self.env.user._is_admin():
+        #     domain = domain
+        # else:
+        #     domain.append(('user_id', '=', self.env.user.id), )
+        all = activity.with_context(active_test=False).search(domain)
+        draft = all.filtered(lambda x: x.state == 'draft')
+        waiting_tiss = all.filtered(lambda x: x.state == 'waiting_tiss')
+        completion_form = all.filtered(lambda x: x.state == 'completion_form')
+        pending_hro_approval = all.filtered(lambda x: x.state == 'pending_hro_approval')
+        pending_payment = all.filtered(lambda x: x.state == 'pending_payment')
+        closed = all.filtered(lambda x: x.state == 'closed')
+        res = {
+            'len_all': len(all),
+            'len_waiting_tiss': len(waiting_tiss),
+            'len_draft': len(draft),
+            'len_completion_form': len(completion_form),
+            'len_pending_hro_approval': len(pending_hro_approval),
+            'len_pending_payment': len(pending_payment),
+            'len_closed': len(closed)
+        }
+        return res
+    
     def _group_expand_states(self, states, domain, order):
         return [key for key, val in type(self).state.selection]
 
@@ -149,7 +176,8 @@ class ProbateCase(models.Model):
                 template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': email_to}, email_layout_xmlid='mail.mail_notification_light')
     #STAGE SUBMIT
     def action_submit(self):
-        self.write({'state': 'waiting_tiss'})
+        now = fields.date.today()
+        self.write({'state': 'waiting_tiss','approve_date_creator': now})
         self.send_email_notification(stage='waiting_tiss')
         # now = fields.date.today()
         # date_string = now.strftime('%d-%m-%Y')

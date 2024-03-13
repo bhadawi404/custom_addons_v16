@@ -8,6 +8,7 @@
     'summary': 'Porbate Case Management - v1.0',
     'depends': ['base','contacts'],
     'data': [
+        'views/dashboard.xml',
         'views/reporting.xml',
         'data/report_probate_case.xml',
         'wizards/wizard_payment_view.xml',
@@ -22,6 +23,15 @@
         'views/menu_items.xml',
         'security/ir.model.access.csv',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'porbate_case_management/static/src/css/dashboard.css',
+            'porbate_case_management/static/src/css/style.scss',
+            'porbate_case_management/static/src/css/material-gauge.css',
+            'porbate_case_management/static/src/xml/activity_dashboard_view.xml',
+            'porbate_case_management/static/src/js/activity_dashboard.js',
+        ],
+    },
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
