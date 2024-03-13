@@ -270,6 +270,7 @@
         <field name="name">Case</field>
         <field name="res_model">probate.case</field>
         <field name="view_mode">kanban,tree,form,search</field>
+        <field name="context">{'search_default_group_by_state': 1}</field>
         <field name="domain">[]</field>
     </record>
 

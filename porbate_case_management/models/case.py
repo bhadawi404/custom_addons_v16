@@ -72,7 +72,7 @@ class ProbateCase(models.Model):
         ('pending_hro_approval', 'Pending HRO approval'),
         ('pending_payment', 'Pending payment'),
         ('closed', 'Closed'),
-    ], string='State', default='draft', tracking=True)
+    ], string='State', default='draft', group_expand='_group_expand_states', tracking=True, track_visibility='always')
     supervisor_id = fields.Many2one('res.users', string='Supervisor')
     email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
     show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
@@ -97,6 +97,9 @@ class ProbateCase(models.Model):
     approve_date_accounting = fields.Date('Approved Accounting')
 
     administrator_of_state = fields.Char('Name of the Administrator of the estate')
+
+    def _group_expand_states(self, states, domain, order):
+        return [key for key, val in type(self).state.selection]
 
     @api.ondelete(at_uninstall=False)
     def _unlink_except_done_or_cancel(self):
