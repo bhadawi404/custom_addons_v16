@@ -137,12 +137,12 @@ class ProbateCase(models.Model):
         for paid in paid_value:
             total_paid += paid.amount
         
-        partially_value = value_property.sudo().search(([('state','=', 'partial')]))
+        partially_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'partial')]))
         total_partially = 0
         for partially in partially_value:
             total_partially += partially.paid
 
-        not_paid_value = value_property.sudo().search(([('state','=', 'pending_payment')]))
+        not_paid_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'pending_payment')]))
         total_not_paid = 0
         for not_paid in not_paid_value:
             total_not_paid += not_paid.balance

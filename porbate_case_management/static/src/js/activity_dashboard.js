@@ -315,7 +315,7 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         };
         this.do_action({
             type: 'ir.actions.act_window',
-            name: "Total Inventory",
+            name: "Total Expected Inventory (All Properties values)",
             res_model: 'probate.case.property.value',
             views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
             view_mode: 'kanban',
@@ -368,7 +368,7 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         };
         this.do_action({
             type: 'ir.actions.act_window',
-            name: "Not Paid at All",
+            name: "Not paid (Awaiting Tiss)",
             res_model: 'probate.case.property.value',
             domain: [['state', '=', 'pending_payment']],
             views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
