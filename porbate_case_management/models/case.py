@@ -132,7 +132,7 @@ class ProbateCase(models.Model):
         for total_inventory in case:
             total += total_inventory.total_value
 
-        paid_value = payment_beneficaries.sudo().search(domain)
+        paid_value = payment_beneficaries.sudo().search(([('case_id','!=',False)]))
         total_paid = 0
         for paid in paid_value:
             total_paid += paid.amount
