@@ -194,7 +194,7 @@
 										<b>Balance:
                                       </b>
                                       <span title="Payment Date">
-                                        <t t-out="record.paid.value"/>
+                                        <t t-out="record.balance.value"/>
                                     </span>
 									</div>
 								</div>
