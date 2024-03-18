@@ -51,7 +51,7 @@
                     <field name="show_button_closed_for_payment" invisible="1" />
                     <button string="Completed" name="closed_to_payment" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_closed_for_payment', '=', False)]}"/>
                     <button string="Create Payment" name="action_pay" type="object" class="oe_highlight" attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/>
-                    <button string="Send back to HRO" name="action_reject_payment" type="object" attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/>
+                    <!-- <button string="Send back to HRO" name="action_reject_payment" type="object" attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/> -->
                     <!-- Stage 6 -->
                     <field name="show_button_closed" invisible="1" />
                     <field name="show_button_upload_document_clossure_presiding" invisible="1" />
