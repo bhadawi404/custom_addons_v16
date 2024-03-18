@@ -333,8 +333,8 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         this.do_action({
             type: 'ir.actions.act_window',
             name: "Paid Inventory",
-            res_model: 'probate.case.property.value',
-            domain: [['state', '=', 'paid']],
+            res_model: 'payment.beneficaries',
+            // domain: [['state', '=', 'paid']],
             views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
             view_mode: 'kanban',
             target: 'current',

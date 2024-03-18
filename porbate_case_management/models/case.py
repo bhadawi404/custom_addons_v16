@@ -113,6 +113,7 @@ class ProbateCase(models.Model):
         """get the activity count details"""
         activity = self.env['probate.case']
         value_property = self.env['probate.case.property.value']
+        payment_beneficaries = self.env['payment.beneficaries']
         domain = []
         # if self.env.user._is_admin():
         #     domain = domain
@@ -131,10 +132,10 @@ class ProbateCase(models.Model):
         for total_inventory in case:
             total += total_inventory.total_value
 
-        paid_value = value_property.sudo().search(([('state','=', 'paid')]))
+        paid_value = payment_beneficaries.sudo().search(domain)
         total_paid = 0
         for paid in paid_value:
-            total_paid += paid.paid
+            total_paid += paid.amount
         
         partially_value = value_property.sudo().search(([('state','=', 'partial')]))
         total_partially = 0
