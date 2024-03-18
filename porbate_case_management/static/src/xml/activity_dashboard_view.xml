@@ -219,6 +219,69 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="activity-dashboard-card paid_inventory">
+                        <div class="activity-dashboard-card__icon-container bg-mauve-light d-flex">
+                            <i class="fa fa-clock-o text-mauve" style="padding-right: 80px; color: #3c3939;font-size: 30px;
+                            padding-left: 0px;padding-bottom: 5px;padding-top: 13px;"/>
+                        </div>
+                        
+                        <div class="dashboard-card__details"
+                             style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
+                            <h4>
+                                <span>
+                                    <div class="text-center">Paid Inventory</div>
+                                    <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
+                                        <t t-esc="paid_inventory"/>
+                                    </div>
+                                </span>
+                            </h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="activity-dashboard-card partially_inventory">
+                        <div class="activity-dashboard-card__icon-container bg-mauve-light d-flex">
+                            <i class="fa fa-clock-o text-mauve" style="padding-right: 80px; color: #3c3939;font-size: 30px;
+                            padding-left: 0px;padding-bottom: 5px;padding-top: 13px;"/>
+                        </div>
+                        
+                        <div class="dashboard-card__details"
+                             style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
+                            <h4>
+                                <span>
+                                    <div class="text-center">Partially Paid Inventory</div>
+                                    <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
+                                        <t t-esc="partially_inventory"/>
+                                    </div>
+                                </span>
+                            </h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="activity-dashboard-card not_paid">
+                        <div class="activity-dashboard-card__icon-container bg-mauve-light d-flex">
+                            <i class="fa fa-clock-o text-mauve" style="padding-right: 80px; color: #3c3939;font-size: 30px;
+                            padding-left: 0px;padding-bottom: 5px;padding-top: 13px;"/>
+                        </div>
+                        
+                        <div class="dashboard-card__details"
+                             style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
+                            <h4>
+                                <span>
+                                    <div class="text-center">Not paid at All</div>
+                                    <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
+                                        <t t-esc="not_paid"/>
+                                    </div>
+                                </span>
+                            </h4>
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     </t>

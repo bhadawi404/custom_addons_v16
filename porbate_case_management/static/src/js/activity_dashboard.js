@@ -19,6 +19,9 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         'click .case_to_close_stage': 'case_to_close_stage',
         'click .close_stage': 'close_stage',
         'click .total_inventory': 'total_inventory',
+        'click .paid_inventory': 'paid_inventory',
+        'click .partially_inventory': 'partially_inventory',
+        'click .not_paid': 'not_paid',
         'click .activity_type': 'activity_type',
         'click .click-view': 'click_view',
         'click .click-origin-view': 'click_origin_view'
@@ -55,7 +58,10 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
                 len_pending_payment: result.len_pending_payment,
                 len_case_to_close: result.len_case_to_close,
                 len_closed: result.len_closed,
-                total_inventory:result.total_inventory
+                total_inventory:result.total_inventory,
+                paid_inventory: result.paid_inventory,
+                partially_inventory: result.partially_inventory,
+                not_paid: result.not_paid
             }));
         });
         self.results = '';
@@ -311,6 +317,60 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
             type: 'ir.actions.act_window',
             name: "Total Inventory",
             res_model: 'probate.case.property.value',
+            views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
+            view_mode: 'kanban',
+            target: 'current',
+            context: { active_test: false },
+        });
+    },
+    paid_inventory: function(e) {
+        var self = this;
+        e.stopPropagation();
+        e.preventDefault();
+        var options = {
+            on_reverse_breadcrumb: this.on_reverse_breadcrumb,
+        };
+        this.do_action({
+            type: 'ir.actions.act_window',
+            name: "Paid Inventory",
+            res_model: 'probate.case.property.value',
+            domain: [['state', '=', 'paid']],
+            views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
+            view_mode: 'kanban',
+            target: 'current',
+            context: { active_test: false },
+        });
+    },
+    partially_inventory: function(e) {
+        var self = this;
+        e.stopPropagation();
+        e.preventDefault();
+        var options = {
+            on_reverse_breadcrumb: this.on_reverse_breadcrumb,
+        };
+        this.do_action({
+            type: 'ir.actions.act_window',
+            name: "Partially Paid Inventory",
+            res_model: 'probate.case.property.value',
+            domain: [['state', '=', 'partial']],
+            views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
+            view_mode: 'kanban',
+            target: 'current',
+            context: { active_test: false },
+        });
+    },
+    not_paid: function(e) {
+        var self = this;
+        e.stopPropagation();
+        e.preventDefault();
+        var options = {
+            on_reverse_breadcrumb: this.on_reverse_breadcrumb,
+        };
+        this.do_action({
+            type: 'ir.actions.act_window',
+            name: "Not Paid at All",
+            res_model: 'probate.case.property.value',
+            domain: [['state', '=', 'pending_payment']],
             views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
             view_mode: 'kanban',
             target: 'current',

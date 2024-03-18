@@ -112,6 +112,7 @@ class ProbateCase(models.Model):
     def get_state_count(self):
         """get the activity count details"""
         activity = self.env['probate.case']
+        value_property = self.env['probate.case.property.value']
         domain = []
         # if self.env.user._is_admin():
         #     domain = domain
@@ -129,6 +130,21 @@ class ProbateCase(models.Model):
         total = 0
         for total_inventory in case:
             total += total_inventory.total_value
+
+        paid_value = value_property.sudo().search(([('state','=', 'paid')]))
+        total_paid = 0
+        for paid in paid_value:
+            total_paid += paid.paid
+        
+        partially_value = value_property.sudo().search(([('state','=', 'partial')]))
+        total_partially = 0
+        for partially in partially_value:
+            total_partially += partially.paid
+
+        not_paid_value = value_property.sudo().search(([('state','=', 'pending_payment')]))
+        total_not_paid = 0
+        for not_paid in not_paid_value:
+            total_not_paid += not_paid.balance
         res = {
             'len_all': len(all),
             'len_waiting_tiss': len(waiting_tiss),
@@ -138,7 +154,10 @@ class ProbateCase(models.Model):
             'len_pending_payment': len(pending_payment),
             'len_closed': len(closed),
             'len_case_to_close': len(case_to_closed),
-            'total_inventory':f'{total:,.2f}'
+            'total_inventory':f'{total:,.2f}',
+            'paid_inventory':f'{total_paid:,.2f}',
+            'partially_inventory': f'{total_partially:,.2f}',
+            'not_paid': f'{total_not_paid:,.2f}'
         }
         return res
     
