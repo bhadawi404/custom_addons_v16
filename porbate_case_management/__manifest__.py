@@ -20,8 +20,8 @@
         'data/position_user.xml',
         'views/district_view.xml',
         'views/court_view.xml',
-        'views/menu_items.xml',
         'security/security.xml',
+        'views/menu_items.xml',
         'security/ir.model.access.csv',
     ],
     'assets': {
