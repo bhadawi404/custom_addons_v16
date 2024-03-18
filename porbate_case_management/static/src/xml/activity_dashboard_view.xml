@@ -148,7 +148,54 @@
                 </div>
 
                 <div class="col-sm-12 col-md-4">
-                    <div class="activity-dashboard-card closed_stage">
+                    <div class="activity-dashboard-card case_to_close_stage">
+                        <div class="activity-dashboard-card__icon-container bg-mauve-light d-flex">
+                            <i class="fa fa-clock-o text-mauve" style="padding-right: 80px; color: #3c3939;font-size: 30px;
+                            padding-left: 0px;padding-bottom: 5px;padding-top: 13px;"/>
+                        </div>
+                        <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
+                            <t t-esc="len_case_to_close"/>
+                        </div>
+                        <div class="dashboard-card__details"
+                             style="padding-left: 26px;padding-bottom: 03px;padding-top: 11px;">
+                            <h3>
+                                <span>
+                                    <div id="leads_this_year"/>
+                                    <div id="leads_this_quarter"/>
+                                    <div id="leads_this_month"/>
+                                    <div id="leads_this_week"/>
+                                </span>
+                            </h3>
+                            <p>
+                                <h4>To Close</h4>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div class="activity-dashboard-card total_inventory">
+                        <div class="activity-dashboard-card__icon-container bg-mauve-light d-flex">
+                            <i class="fa fa-clock-o text-mauve" style="padding-right: 80px; color: #3c3939;font-size: 30px;
+                            padding-left: 0px;padding-bottom: 5px;padding-top: 13px;"/>
+                        </div>
+                        
+                        <div class="dashboard-card__details"
+                             style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
+                            <h4>
+                                <span>
+                                    <div class="text-center">Total Inventory</div>
+                                    <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
+                                        <t t-esc="total_inventory"/>
+                                    </div>
+                                </span>
+                            </h4>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-sm-12 col-md-6">
+                    <div class="activity-dashboard-card close_stage">
                         <div class="activity-dashboard-card__icon-container bg-mauve-light d-flex">
                             <i class="fa fa-clock-o text-mauve" style="padding-right: 80px; color: #3c3939;font-size: 30px;
                             padding-left: 0px;padding-bottom: 5px;padding-top: 13px;"/>
@@ -397,6 +444,49 @@
                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
                 <thead>
                     <tr>
+                        <th>To Close</th>
+                    </tr>
+                    <t t-if="case_to_close_stage == ''">
+                        <td>No Data Available</td>
+                    </t>
+                </thead>
+                <t t-if="case_to_close_stage != ''">
+                    <thead class="table table-bordered mt32">
+                        <tr class="table_head">
+                            <th class="table_head_">Name</th>
+                            <th class="table_head_">Assigned to</th>
+                            <th class="table_head_">Assigned on</th>
+                            <th class="table_head_">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="case_to_close_stage" t-as="line">
+                            <td>
+                                <t t-esc="line['name']"/>
+                            </td>
+                            <td>
+                                <t t-esc="line['presiding_magistrate']['1']"/>
+                            </td>
+                            <td>
+                                <t t-esc="line['approve_date_accounting']"/>
+                            </td>
+                            <td class="click-view">
+                                <button t-att-value="line['id']"
+                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                    View
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </t>
+            </table>
+        </div>
+        <div class="table_main_view">
+            <table cellspacing="10" width="100%"
+                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                <thead>
+                    <tr>
                         <th>Closed</th>
                     </tr>
                     <t t-if="closed_stage == ''">
@@ -418,10 +508,10 @@
                                 <t t-esc="line['name']"/>
                             </td>
                             <td>
-                                <t t-esc="line['accounting_id']['1']"/>
+                                <t t-esc="line['presiding_magistrate']['1']"/>
                             </td>
                             <td>
-                                <t t-esc="line['approve_date_accounting']"/>
+                                <t t-esc="line['approve_date_closed']"/>
                             </td>
                             <td class="click-view">
                                 <button t-att-value="line['id']"

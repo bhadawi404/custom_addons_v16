@@ -124,6 +124,11 @@ class ProbateCase(models.Model):
         pending_hro_approval = all.filtered(lambda x: x.state == 'pending_hro_approval')
         pending_payment = all.filtered(lambda x: x.state == 'pending_payment')
         closed = all.filtered(lambda x: x.state == 'closed')
+        case_to_closed = all.filtered(lambda x: x.state == 'case_to_close')
+        case = activity.sudo().search(domain)
+        total = 0
+        for total_inventory in case:
+            total += total_inventory.total_value
         res = {
             'len_all': len(all),
             'len_waiting_tiss': len(waiting_tiss),
@@ -131,7 +136,9 @@ class ProbateCase(models.Model):
             'len_completion_form': len(completion_form),
             'len_pending_hro_approval': len(pending_hro_approval),
             'len_pending_payment': len(pending_payment),
-            'len_closed': len(closed)
+            'len_closed': len(closed),
+            'len_case_to_close': len(case_to_closed),
+            'total_inventory':f'{total:,.2f}'
         }
         return res
     

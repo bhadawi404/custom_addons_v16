@@ -16,7 +16,9 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         'click .completion_form_stage': 'completion_form_stage',
         'click .pending_hro_approval_stage': 'pending_hro_approval_stage',
         'click .pending_payment_stage': 'pending_payment_stage',
-        'click .closed_stage': 'closed_stage',
+        'click .case_to_close_stage': 'case_to_close_stage',
+        'click .close_stage': 'close_stage',
+        'click .total_inventory': 'total_inventory',
         'click .activity_type': 'activity_type',
         'click .click-view': 'click_view',
         'click .click-origin-view': 'click_origin_view'
@@ -51,16 +53,18 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
                 len_completion_form: result.len_completion_form,
                 len_pending_hro_approval: result.len_pending_hro_approval,
                 len_pending_payment: result.len_pending_payment,
-                len_closed: result.len_closed
+                len_case_to_close: result.len_case_to_close,
+                len_closed: result.len_closed,
+                total_inventory:result.total_inventory
             }));
         });
-        self.results = ''
+        self.results = '';
         self._rpc({
             model: 'probate.case',
             method: 'search_read',
-            domain: [["state", "=", 'closed']],
+            domain: [["state", "=", 'case_to_close']],
             context: { active_test: false },
-        }).then(function (closed_stage) {
+        }).then(function (case_to_close_stage) {
             self._rpc({
                 model: 'probate.case',
                 method: 'search_read',
@@ -91,14 +95,23 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
                                 domain: [["state", "=", 'pending_payment']],
                                 context: { active_test: false },
                             }).then(function (pending_payment_stage) {
-                                self.$('.table_view_activity').html(QWeb.render('ActivityTable', {
-                                    closed_stage: closed_stage,
-                                    draft_stage: draft_stage,
-                                    waiting_tiss_stage: waiting_tiss_stage,
-                                    completion_form_stage: completion_form_stage,
-                                    pending_hro_approval_stage: pending_hro_approval_stage,
-                                    pending_payment_stage: pending_payment_stage
-                                }));
+                                // Menambahkan panggilan metode RPC untuk mencari rekaman dengan status 'closed'
+                                self._rpc({
+                                    model: 'probate.case',
+                                    method: 'search_read',
+                                    domain: [["state", "=", 'closed']],
+                                    context: { active_test: false },
+                                }).then(function (closed_stage) {
+                                    self.$('.table_view_activity').html(QWeb.render('ActivityTable', {
+                                        case_to_close_stage: case_to_close_stage,
+                                        draft_stage: draft_stage,
+                                        waiting_tiss_stage: waiting_tiss_stage,
+                                        completion_form_stage: completion_form_stage,
+                                        pending_hro_approval_stage: pending_hro_approval_stage,
+                                        pending_payment_stage: pending_payment_stage,
+                                        closed_stage: closed_stage
+                                    }));
+                                });
                             });
                         });
                     });
@@ -251,7 +264,25 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         });
     },
 
-    closed_stage: function(e) {
+    case_to_close_stage: function(e) {
+        var self = this;
+        e.stopPropagation();
+        e.preventDefault();
+        var options = {
+            on_reverse_breadcrumb: this.on_reverse_breadcrumb,
+        };
+        this.do_action({
+            type: 'ir.actions.act_window',
+            name: "To Close",
+            res_model: 'probate.case',
+            domain: [['state', '=', 'case_to_close']],
+            views: [[false, 'list'], [false, 'form']],
+            view_mode: 'list',
+            target: 'current',
+            context: { active_test: false },
+        });
+    },
+    close_stage: function(e) {
         var self = this;
         e.stopPropagation();
         e.preventDefault();
@@ -265,6 +296,23 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
             domain: [['state', '=', 'closed']],
             views: [[false, 'list'], [false, 'form']],
             view_mode: 'list',
+            target: 'current',
+            context: { active_test: false },
+        });
+    },
+    total_inventory: function(e) {
+        var self = this;
+        e.stopPropagation();
+        e.preventDefault();
+        var options = {
+            on_reverse_breadcrumb: this.on_reverse_breadcrumb,
+        };
+        this.do_action({
+            type: 'ir.actions.act_window',
+            name: "Total Inventory",
+            res_model: 'probate.case.property.value',
+            views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
+            view_mode: 'kanban',
             target: 'current',
             context: { active_test: false },
         });
