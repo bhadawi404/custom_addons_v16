@@ -64,6 +64,16 @@
                             <field name="category_id" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder='e.g. "B2B", "VIP", "Consulting", ...'/>
                         </group>
                     </group>
+                    <notebook>
+                        <page name="access_rights" string="Access Rights">
+                            <group string="Multi Companies" attrs="{'invisible': [('companies_count', '&lt;=', 1)]}">
+                                <field string="Allowed Companies" name="company_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field string="Default Company" name="company_id" context="{'user_preference': 0}"/>
+                                <field string="Companies count" name="companies_count" invisible="1"/>
+                            </group>
+                            <field name="groups_id"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

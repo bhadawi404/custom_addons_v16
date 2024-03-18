@@ -9,7 +9,7 @@
         <menuitem id="menu_reporting_pending_tiss" name="Report Pending Tiss" parent="porbate_case_management.menu_reporting" sequence="2" action="porbate_case_management.reporting_pending_tiss_action"/>
 
         <!--End Reporting-->
-    <menuitem id="menu_configuration_root" name="Configuration" parent="porbate_case_management.menu_probate_case_root" sequence="5"/>
+    <menuitem id="menu_configuration_root" name="Configuration" parent="porbate_case_management.menu_probate_case_root" sequence="5" groups="group_probate_case_adminisitrator"/>
     <menuitem id="menu_configuration_court" name="Court" parent="porbate_case_management.menu_configuration_root" sequence="1" action="porbate_case_management.court_action"/>
     <menuitem id="menu_configuration_district" name="District" parent="porbate_case_management.menu_configuration_root" sequence="2" action="porbate_case_management.district_action"/>
     <menuitem id="menu_configuration_branch_district" name="Branch District" parent="porbate_case_management.menu_configuration_root" sequence="3" action="porbate_case_management.branch_district_action"/>

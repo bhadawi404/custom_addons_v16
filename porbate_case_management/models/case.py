@@ -73,6 +73,7 @@ class ProbateCase(models.Model):
         ('pending_payment', 'Pending payment'),
         ('case_to_close', 'Case to Close'),
         ('closed', 'Closed'),
+        ('cancelled', 'Cancelled'),
     ], string='State', default='draft', group_expand='_group_expand_states', tracking=True, track_visibility='always')
     supervisor_id = fields.Many2one('res.users', string='Supervisor')
     email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
@@ -197,6 +198,8 @@ class ProbateCase(models.Model):
     def action_back_to_draft(self):
         self.write({'state': 'draft'})
     
+    def action_cancel(self):
+        self.write({'state': 'cancelled'})
     
     #STAGE AWAITING TISS
     def _show_button_confirm_suppervisor(self):
