@@ -353,7 +353,7 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
             name: "Partially Paid Inventory",
             res_model: 'probate.case.property.value',
             domain: [['state', '=', 'partial']],
-            views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
+            views: [[false, 'kanban'],[false, 'list']],
             view_mode: 'kanban',
             target: 'current',
             context: { active_test: false },
