@@ -26,6 +26,19 @@
                 </form>
             </field>
         </record>
+        <record id="reject_approval_presiding" model="ir.ui.view">
+            <field name="name">reject_approval_presiding</field>
+            <field name="model">reason.reject.presiding</field>
+            <field name="arch" type="xml">
+                <form string="Reason Reject">
+                    <field name="remarks" placeholder="What Reason Reject?"/>
+                    <footer>
+                        <button name="action_reject" string="Submit" type="object" class="btn-primary" data-hotkey="q"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
         <record id="reject_approval_payment" model="ir.ui.view">
             <field name="name">reject_approval_hro</field>
             <field name="model">reason.reject.payment</field>

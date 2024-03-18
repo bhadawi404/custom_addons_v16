@@ -45,11 +45,15 @@
                     <button string="Reject" name="action_reject_hro" type="object" attrs="{'invisible': [('show_button_confirm_for_hro', '=', False)]}"/>
                     <!--Stage 5-->
                     <field name="show_button_confirm_for_payment" invisible="1" />
-                    <button string="Closed" name="closed_case" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/>
+                    <button string="Completed" name="closed_to_payment" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/>
                     <button string="Create Payment" name="action_pay" type="object" class="oe_highlight" attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/>
                     <button string="Send back to HRO" name="action_reject_payment" type="object" attrs="{'invisible': [('show_button_confirm_for_payment', '=', False)]}"/>
+                    <!-- Stage 6 -->
+                    <field name="show_button_closed" invisible="1" />
+                    <button string="Closed" name="action_approve_presiding" type="object" class="oe_highlight"  attrs="{'invisible': [('show_button_closed', '=', False)]}"/>
+                    <button string="Reject" name="action_reject_predising" type="object" attrs="{'invisible': [('show_button_closed', '=', False)]}"/>
 
-                    <field name="state" widget="statusbar" statusbar_visible="draft,waiting_tiss,completion_form,pending_hro_approval,pending_payment,closed" readonly="1"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,waiting_tiss,completion_form,pending_hro_approval,pending_payment,case_to_close,closed" readonly="1"/>
                     
                 </header>
                 <sheet>

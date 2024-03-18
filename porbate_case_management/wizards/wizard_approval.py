@@ -115,3 +115,41 @@ class ReasonRejectAdmini(models.TransientModel):
                 'action_url': action_url,
             }
             template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': rec.hro_approval.email}, email_layout_xmlid='mail.mail_notification_light')
+
+
+class ReasonRejectPresiding(models.TransientModel):
+    _name = 'reason.reject.presiding'
+    _description = 'Get Mention Reason presiding'
+
+    remarks = fields.Html(
+        'Reason Reject', sanitize=True
+    )
+
+    def action_reject(self):
+        self.ensure_one()
+        case = self.env['probate.case'].browse(self.env.context.get('active_ids'))
+        if not is_html_empty(self.remarks):
+            case._track_set_log_message(
+                '<div style="margin-bottom: 4px;"><p>%s:</p>%s<br /></div>' % (
+                    _('Reason Reject'),
+                    self.remarks
+                )
+            )
+        case.sudo().write({'state': 'pending_payment'})
+        for rec in case:
+            #Send Email
+            action_url = '%s/web#id=%s&menu_id=%s&action=%s&model=probate.case&view_type=form' % (
+                self.get_base_url(),
+                rec.id,
+                self.env.ref('porbate_case_management.menu_case_root').id,
+                self.env.ref('porbate_case_management.case_action').id,
+            )
+            template_approval = self.env.ref('porbate_case_management.email_reject_presiding', raise_if_not_found=False)
+            template_context = {
+                'to': rec.accounting_id.name,
+                'message': self.remarks,
+                'user_id': self.env.user.name,
+                'company_id': self.env.company.name,
+                'action_url': action_url,
+            }
+            template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': rec.administrator_name.email}, email_layout_xmlid='mail.mail_notification_light')

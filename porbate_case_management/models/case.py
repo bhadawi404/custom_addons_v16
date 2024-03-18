@@ -71,6 +71,7 @@ class ProbateCase(models.Model):
         ('completion_form', 'Completion of forms'),
         ('pending_hro_approval', 'Pending HRO approval'),
         ('pending_payment', 'Pending payment'),
+        ('case_to_close', 'Case to Close'),
         ('closed', 'Closed'),
     ], string='State', default='draft', group_expand='_group_expand_states', tracking=True, track_visibility='always')
     supervisor_id = fields.Many2one('res.users', string='Supervisor')
@@ -90,12 +91,15 @@ class ProbateCase(models.Model):
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries',ondelete='cascade')
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
 
+    show_button_closed = fields.Boolean('show_button_closed', compute='_show_button_closed')
+
     #APPROVAL DATE
     approve_date_creator = fields.Date('Approved Created by')
     approve_date_supervisor = fields.Date('Approved Supervisor')
     approve_date_administrator = fields.Date('Approved Administrator')
     approve_date_hro = fields.Date('Approved HRO')
     approve_date_accounting = fields.Date('Approved Accounting')
+    approve_date_closed = fields.Date('Closed Case')
 
     administrator_of_state = fields.Char('Name of the Administrator of the estate')
 
@@ -151,6 +155,10 @@ class ProbateCase(models.Model):
             to = self.accounting_id.name
             email_to = self.accounting_id.email
             message = f"You have been assigned to complete the payment management of Case: {self.name}"
+        if stage == 'case_to_close':
+            to = self.presiding_magistrate.name
+            email_to = self.presiding_magistrate.email
+            message = f"You have been assigned to closed of Case: {self.name}"
         if stage == 'closed':
             to = 'All'
             email_to = [self.supervisor_id.partner_id.id,self.administrator_name.partner_id.id,self.accounting_id.partner_id.id]
@@ -179,10 +187,7 @@ class ProbateCase(models.Model):
         now = fields.date.today()
         self.write({'state': 'waiting_tiss','approve_date_creator': now})
         self.send_email_notification(stage='waiting_tiss')
-        # now = fields.date.today()
-        # date_string = now.strftime('%d-%m-%Y')
-        # message = f"{self.supervisor_id.name} has been assigned by {self.env.user.name} on {date_string} "
-        # self.message_post(body=message)
+        
 
     def action_back_to_draft(self):
         self.write({'state': 'draft'})
@@ -241,10 +246,7 @@ class ProbateCase(models.Model):
         now = fields.date.today()
         self.write({'state': 'completion_form','approve_date_supervisor': now})
         self.send_email_notification(stage='completion_form')
-        # now = fields.date.today()
-        # date_string = now.strftime('%d-%m-%Y')
-        # message = f"{self.administrator_name.name} has been assigned by {self.env.user.name} on {date_string} "
-        # self.message_post(body=message)
+        
     
 
     
@@ -392,11 +394,39 @@ class ProbateCase(models.Model):
         }
         return action
     
-    def closed_case(self):
+    def closed_to_payment(self):
         now = fields.date.today()
-        self.write({'state': 'closed','approve_date_accounting': now})
-        self.send_email_notification(stage='closed')
+        self.write({'state': 'case_to_close','approve_date_accounting': now})
+        self.send_email_notification(stage='case_to_close')
         
+    #STAGE CLOSED CASE
+    def _show_button_closed(self):
+        for record in self:
+            if record.state == 'case_to_close':
+                if record.env.user.id == record.presiding_magistrate.id:
+                    record.show_button_closed = True
+                else:
+                    record.show_button_closed = False
+            else:
+                record.show_button_closed = False
+
+    def action_approve_presiding(self):
+        now = fields.date.today()
+        self.write({'state': 'closed','approve_date_closed': now})
+        self.send_email_notification(stage='closed')
+
+    def action_reject_predising(self):
+        form_view_presiding = self.env.ref('porbate_case_management.reject_approval_presiding').id
+        action =  {
+            'name': _('Reason Reject'),
+            'view_mode': 'form',
+            'res_model': 'reason.reject.presiding',
+            'view_id': form_view_presiding,
+            'views': [(form_view_presiding, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+        return action
 
     @api.depends('case_number', 'district_id', 'branch_district_id')
     def _get_system_number(self):
