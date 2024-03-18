@@ -251,7 +251,7 @@
                              style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
                             <h4>
                                 <span>
-                                    <div class="text-center">Partially Paid Inventory</div>
+                                    <div class="text-center">Inventory To Pay Beneficiary</div>
                                     <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
                                         <t t-esc="partially_inventory"/>
                                     </div>
