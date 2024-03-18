@@ -183,7 +183,7 @@
                              style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
                             <h4>
                                 <span>
-                                    <div class="text-center">Total Inventory</div>
+                                    <div class="text-center">Total Expected Inventory (All Properties values)</div>
                                     <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
                                         <t t-esc="total_inventory"/>
                                     </div>
@@ -272,7 +272,7 @@
                              style="padding-left: 26px;padding-bottom: 03px;padding-top: 0px;">
                             <h4>
                                 <span>
-                                    <div class="text-center">Not paid at All</div>
+                                    <div class="text-center">Not paid (Awaiting Tiss)</div>
                                     <div style="font-size: 30px;color: #3c3939;padding-left: 0px;padding-bottom: 17px;padding-top: 11px;">
                                         <t t-esc="not_paid"/>
                                     </div>
