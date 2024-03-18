@@ -12,7 +12,7 @@ class UploadDocument(models.TransientModel):
     name = fields.Char('Case')
     detail_property_id = fields.Many2one('probate.case.property', string='Detail Property')
     description = fields.Text('Description')
-    attachment = fields.Binary('Attachment')
+    attachment = fields.Binary('Attachment', required=True)
 
     def action_upload(self):
         self.ensure_one()
@@ -38,8 +38,8 @@ class UploadForm(models.TransientModel):
         ('distribution_form', 'Distribution form'),
         ('voucher_payment', 'Voucher for payment'),
     ], string='Form Type')
-    description = fields.Text('Description')
-    attachment = fields.Binary('Attachment')
+    description = fields.Text('Description',required=True)
+    attachment = fields.Binary('Attachment', required=True)
 
     
     def action_upload_form(self):
@@ -65,7 +65,7 @@ class UploadForm(models.TransientModel):
         ('form_vi', 'Form No.VI'),
     ], string='Form Type', required=True)
     description = fields.Text('Details', required=True)
-    attachment = fields.Binary('Attachment')
+    attachment = fields.Binary('Attachment', required=True)
 
     def action_upload_form(self):
         self.ensure_one()
