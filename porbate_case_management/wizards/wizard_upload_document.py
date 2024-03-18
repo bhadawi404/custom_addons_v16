@@ -53,3 +53,28 @@ class UploadForm(models.TransientModel):
             'form_type': self.form_type
         }
         create_form = self.env['probate.case.form'].sudo().create(document)
+
+
+class UploadForm(models.TransientModel):
+    _name = 'form.upload.closser'
+    _description = 'Upload Form Closser'
+
+    name = fields.Char('Form Name')
+    form_type = fields.Selection([
+        ('form_v', 'Form No.V'),
+        ('form_vi', 'Form No.VI'),
+    ], string='Form Type', required=True)
+    description = fields.Text('Details', required=True)
+    attachment = fields.Binary('Attachment')
+
+    def action_upload_form(self):
+        self.ensure_one()
+        probate_case = self.env['probate.case'].browse(self.env.context.get('active_ids'))
+        document = {
+            'name': self.name,
+            'description': self.description,
+            'attachment': self.attachment,
+            'case_id': probate_case.id,
+            'form_type': self.form_type
+        }
+        create_form = self.env['probate.case.form.closssure'].sudo().create(document)

@@ -90,8 +90,13 @@ class ProbateCase(models.Model):
     email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
     payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries',ondelete='cascade')
     property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
+    show_button_closed_for_payment = fields.Boolean('show_button_closed_for_payment', compute='_show_button_closed_for_payment')
 
+    #Presiding Judge
+    form_closssure_ids = fields.One2many('probate.case.form.closssure', 'case_id', string='form',ondelete='cascade')
     show_button_closed = fields.Boolean('show_button_closed', compute='_show_button_closed')
+    show_button_upload_document_clossure_presiding = fields.Boolean('show_button_upload_document_clossure_presiding', compute='_show_button_upload_document_clossure_presiding')
+
 
     #APPROVAL DATE
     approve_date_creator = fields.Date('Approved Created by')
@@ -363,6 +368,22 @@ class ProbateCase(models.Model):
                     record.show_button_confirm_for_payment = False
             else:
                 record.show_button_confirm_for_payment = False
+
+    def _show_button_closed_for_payment(self):
+        for record in self:
+            if record.state == 'pending_payment':
+                total_value = 0
+                for paid in record.property_value_ids:
+                    total_value += paid.balance
+                if total_value != 0:
+                    record.show_button_closed_for_payment = False
+                else:
+                    if record.env.user.id == record.accounting_id.id:
+                        record.show_button_closed_for_payment = True
+                    else:
+                        record.show_button_closed_for_payment = False
+            else:
+                record.show_button_closed_for_payment = False
     
     def action_pay(self):
         form_view_create_payment = self.env.ref('porbate_case_management.payment_view_form').id
@@ -403,12 +424,25 @@ class ProbateCase(models.Model):
     def _show_button_closed(self):
         for record in self:
             if record.state == 'case_to_close':
-                if record.env.user.id == record.presiding_magistrate.id:
-                    record.show_button_closed = True
+                if record.form_closssure_ids:
+                    if record.env.user.id == record.presiding_magistrate.id:
+                        record.show_button_closed = True
+                    else:
+                        record.show_button_closed = False
                 else:
                     record.show_button_closed = False
             else:
                 record.show_button_closed = False
+
+    def _show_button_upload_document_clossure_presiding(self):
+        for record in self:
+            if record.state == 'case_to_close':
+                if record.env.user.id == record.presiding_magistrate.id:
+                    record.show_button_upload_document_clossure_presiding = True
+                else:
+                    record.show_button_upload_document_clossure_presiding = False
+            else:
+                record.show_button_upload_document_clossure_presiding = False
 
     def action_approve_presiding(self):
         now = fields.date.today()
@@ -427,6 +461,23 @@ class ProbateCase(models.Model):
             'target': 'new',
         }
         return action
+
+    def action_upload_closser(self):
+        form_view_closer = self.env.ref('porbate_case_management.upload_form_closser_view_form').id
+        action =  {
+            'name': _('Upload Form'),
+            'view_mode': 'form',
+            'res_model': 'form.upload.closser',
+            'view_id': form_view_closer,
+            'views': [(form_view_closer, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'context': {
+            'default_name': self.name,
+        }
+        }
+        return action
+
 
     @api.depends('case_number', 'district_id', 'branch_district_id')
     def _get_system_number(self):

@@ -32,3 +32,17 @@ class FormProbate(models.Model):
     ], string='Form Type')
     description = fields.Text('Details')
     attachment = fields.Binary('Attachment')
+
+class FormProbate(models.Model):
+    _name = 'probate.case.form.closssure'
+    _description = 'Probate Case Form Clossure'
+    _rec_name = 'name'
+
+    case_id = fields.Many2one('probate.case', string='Probate')
+    name = fields.Char('Form Name')
+    form_type = fields.Selection([
+        ('form_v', 'Form No.V'),
+        ('form_vi', 'Form No.VI'),
+    ], string='Form Type', required=True)
+    description = fields.Text('Details', required=True)
+    attachment = fields.Binary('Attachment')

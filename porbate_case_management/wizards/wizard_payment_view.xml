@@ -10,7 +10,7 @@
                     <group>
                         <field name="case_id" invisible="1" />
                         <field name="date_payment" required="1"/>
-                        <field name="beneficiaries_id" domain="[('case_id','=',context.get('default_case_id'))]"/>
+                        <field name="beneficiaries_id" required="1" domain="[('case_id','=',context.get('default_case_id'))]"/>
                         <field name="property_id" domain="[('case_id','=',context.get('default_case_id'))]"/>
                         <field name="amount" required="1"/>
                         <field name="balance" readonly="1" force_save="1"/>
