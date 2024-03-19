@@ -251,6 +251,7 @@ class ProbateCase(models.Model):
                 template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'recipient_ids': email_to}, email_layout_xmlid='mail.mail_notification_light')
             else:
                 template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': email_to}, email_layout_xmlid='mail.mail_notification_light')
+        return {}
     #STAGE SUBMIT
     def action_submit(self):
         now = fields.date.today()
