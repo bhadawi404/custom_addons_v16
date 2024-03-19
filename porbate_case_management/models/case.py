@@ -535,16 +535,40 @@ class ProbateCase(models.Model):
                     'name': sequence,
                 })
     
+    @api.onchange('branch_district_id')
+    def _onchange_get_presiding_magistrate(self): 
+        res = {}
+        if self.branch_district_id:
+            staff_ids = self.env['probate.case.branch.district'].sudo().search([('id','=', self.branch_district_id.id)])
+            list_staff = [(usr.id) for usr in staff_ids.user_ids]
+            res = {'domain': {'presiding_magistrate': [('id', 'in', list_staff)], 'supervisor_id': [('id', 'in', list_staff)],'hro_approval': [('id', 'in', list_staff)],'accounting_id': [('id', 'in', list_staff)],'administrator_name': [('id', 'in', list_staff)]}}
+        else:
+            res = {'domain': {'presiding_magistrate': [('id', '=', False)], 'supervisor_id': [('id', '=', False)],'hro_approval': [('id', '=', False)],'accounting_id': [('id', '=', False)],'administrator_name': [('id', '=', False)]},
+               'value': {'presiding_magistrate': False, 'supervisor_id': False,'hro_approval': False, 'accounting_id': False, 'administrator_name': False}}
+        return res
+    
+    @api.onchange('district_id')
+    def _onchange_get_presiding_magistrate(self): 
+        res = {}
+        if self.district_id:
+            branch_district = self.env['probate.case.district.line'].sudo().search([('district_id','=', self.district_id.id)])
+            list_branch = [(usr.id) for usr in branch_district.branch_district_id]
+            res = {'domain': {'branch_district_id': [('id', 'in', list_branch)]}}
+        else:
+            res = {'domain': {'branch_district_id': [('id', '=', False)]},
+               'value': {'branch_district_id': False}}
+        return res
+    
     @api.onchange('court_id')
     def _onchange_get_presiding_magistrate(self): 
         res = {}
         if self.court_id:
-            presiding_magistrate_ids = self.env['res.users'].sudo().search([('court_ids','in', self.court_id.ids)])
-            list_presiding = [(pr.id) for pr in presiding_magistrate_ids]
-            res = {'domain': {'presiding_magistrate': [('id', 'in', list_presiding)]}}
+            district = self.env['probate.case.district'].sudo().search([('court_id','=', self.court_id.id)])
+            list_district = [(usr.id) for usr in district.court_id]
+            res = {'domain': {'district_id': [('id', 'in', list_district)]}}
         else:
-            res = {'domain': {'presiding_magistrate': [('id', '=', False)]},
-               'value': {'presiding_magistrate': False}}
+            res = {'domain': {'district_id': [('id', '=', False)]},
+               'value': {'district_id': False}}
         return res
     
 
