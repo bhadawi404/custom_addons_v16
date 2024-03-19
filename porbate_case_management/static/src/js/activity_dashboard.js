@@ -271,15 +271,33 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: 'Draft',
-            res_model: 'probate.case',
-            domain: [['state', '=', 'draft']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: 'Draft',
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'draft']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: 'Draft',
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'draft'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
     },
 
@@ -290,32 +308,68 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: 'Completion Form',
-            res_model: 'probate.case',
-            domain: [['state', '=', 'completion_form']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: 'Completion Form',
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'completion_form']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: 'Completion Form',
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'completion_form'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
+        
     },
 
     pending_hro_approval_stage: function(e) {
         var self = this;
         e.stopPropagation();
         e.preventDefault();
-
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Pending HRO Approval",
-            res_model: 'probate.case',
-            domain: [['state', '=', 'pending_hro_approval']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Pending HRO Approval",
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'pending_hro_approval']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Pending HRO Approval",
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'pending_hro_approval'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
     },
 
@@ -326,16 +380,35 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: 'Waiting Tiss',
-            res_model: 'probate.case',
-            domain: [['state', '=', 'waiting_tiss']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: 'Waiting Tiss',
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'waiting_tiss']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: 'Waiting Tiss',
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'waiting_tiss'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
+        
 
     },
 
@@ -346,15 +419,33 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Pending Payment",
-            res_model: 'probate.case',
-            domain: [['state', '=', 'pending_payment']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Pending Payment",
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'pending_payment']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Pending Payment",
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'pending_payment'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
     },
 
@@ -365,16 +456,35 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "To Close",
-            res_model: 'probate.case',
-            domain: [['state', '=', 'case_to_close']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "To Close",
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'case_to_close']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "To Close",
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'case_to_close'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
+        
     },
     close_stage: function(e) {
         var self = this;
@@ -383,16 +493,35 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Closed",
-            res_model: 'probate.case',
-            domain: [['state', '=', 'closed']],
-            views: [[false, 'list'], [false, 'form']],
-            view_mode: 'list',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Closed",
+                    res_model: 'probate.case',
+                    domain: [['state', '=', 'closed']],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Closed",
+                    res_model: 'probate.case',
+                    domain: [["state", "=", 'closed'],["branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'list'], [false, 'form']],
+                    view_mode: 'list',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
+        
     },
     total_inventory: function(e) {
         var self = this;
@@ -401,15 +530,34 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Total Expected Inventory (All Properties values)",
-            res_model: 'probate.case.property.value',
-            views: [[false, 'kanban'],[false, 'list']],
-            view_mode: 'kanban',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Total Expected Inventory (All Properties values)",
+                    res_model: 'probate.case.property.value',
+                    views: [[false, 'kanban'],[false, 'list']],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Total Expected Inventory (All Properties values)",
+                    res_model: 'probate.case.property.value',
+                    views: [[false, 'kanban'],[false, 'list']],
+                    domain: [["case_id.branch_district_id.user_ids", "in", user]],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
+        
     },
     paid_inventory: function(e) {
         var self = this;
@@ -418,14 +566,32 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Paid Inventory to Beneficaries",
-            res_model: 'payment.beneficaries',
-            views: [[false, 'kanban'],[false, 'list']],
-            view_mode: 'kanban',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Paid Inventory to Beneficaries",
+                    res_model: 'payment.beneficaries',
+                    views: [[false, 'kanban'],[false, 'list']],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Paid Inventory to Beneficaries",
+                    res_model: 'payment.beneficaries',
+                    views: [[false, 'kanban'],[false, 'list']],
+                    domain: [["case_id.branch_district_id.user_ids", "in", user]],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
     },
     partially_inventory: function(e) {
@@ -435,15 +601,33 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Inventory To Pay Beneficaries",
-            res_model: 'probate.case.property.value',
-            domain: [['state', '=', 'partial']],
-            views: [[false, 'kanban'],[false, 'list']],
-            view_mode: 'kanban',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Inventory To Pay Beneficaries",
+                    res_model: 'probate.case.property.value',
+                    domain: [['state', '=', 'partial']],
+                    views: [[false, 'kanban'],[false, 'list']],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Inventory To Pay Beneficaries",
+                    res_model: 'probate.case.property.value',
+                    domain: [['state', '=', 'partial'],["case_id.branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'kanban'],[false, 'list']],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
     },
     not_paid: function(e) {
@@ -453,15 +637,33 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         var options = {
             on_reverse_breadcrumb: this.on_reverse_breadcrumb,
         };
-        this.do_action({
-            type: 'ir.actions.act_window',
-            name: "Not paid (Awaiting Tiss)",
-            res_model: 'probate.case.property.value',
-            domain: [['state', '=', 'pending_payment']],
-            views: [[false, 'kanban'],[false, 'list']],
-            view_mode: 'kanban',
-            target: 'current',
-            context: { active_test: false },
+        var user = self.getSession().uid;
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Not paid (Awaiting Tiss)",
+                    res_model: 'probate.case.property.value',
+                    domain: [['state', '=', 'pending_payment']],
+                    views: [[false, 'kanban'],[false, 'list']],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }else{
+                self.do_action({
+                    type: 'ir.actions.act_window',
+                    name: "Not paid (Awaiting Tiss)",
+                    res_model: 'probate.case.property.value',
+                    domain: [['state', '=', 'pending_payment'],["case_id.branch_district_id.user_ids", "in", user]],
+                    views: [[false, 'kanban'],[false, 'list']],
+                    view_mode: 'kanban',
+                    target: 'current',
+                    context: { active_test: false },
+                });
+            }
         });
     },
 

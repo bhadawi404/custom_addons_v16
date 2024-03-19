@@ -121,14 +121,6 @@ class ProbateCase(models.Model):
         value_property = self.env['probate.case.property.value']
         payment_beneficaries = self.env['payment.beneficaries']
         domain = []
-        # if self.env.user._is_admin():
-        #     user_ids = self.env['probate.case.branch.district'].sudo().search([('user_ids','in', self.env.user.ids)])
-        #     if user_ids:
-        #         domain.append(('branch_district_id.user_ids', 'in', self.env.user.id))
-        #     else:
-        #         domain = domain
-        # else:
-        #     domain.append(('branch_district_id.user_ids', 'in', self.env.user.id))
         has_group_administrator = self.env.user.has_group('porbate_case_management.group_probate_case_adminisitrator')
         if has_group_administrator:
             domain = domain
