@@ -332,10 +332,9 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         };
         this.do_action({
             type: 'ir.actions.act_window',
-            name: "Paid Inventory",
+            name: "Paid Inventory to Beneficaries",
             res_model: 'payment.beneficaries',
-            // domain: [['state', '=', 'paid']],
-            views: [[false, 'kanban'],[false, 'list'], [false, 'form']],
+            views: [[false, 'kanban'],[false, 'list']],
             view_mode: 'kanban',
             target: 'current',
             context: { active_test: false },
@@ -350,7 +349,7 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
         };
         this.do_action({
             type: 'ir.actions.act_window',
-            name: "Partially Paid Inventory",
+            name: "Inventory To Pay Beneficaries",
             res_model: 'probate.case.property.value',
             domain: [['state', '=', 'partial']],
             views: [[false, 'kanban'],[false, 'list']],

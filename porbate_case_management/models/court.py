@@ -27,7 +27,7 @@ class Disctrict(models.Model):
     _name = 'probate.case.district'
     _description = 'Probate Case District'
 
-    court_id = fields.Many2one('probate.case.court', string='High Court')
+    court_id = fields.Many2one('probate.case.court', string='High Court', ondelete='cascade')
     district_code = fields.Char('District Code')
     branch_distric_ids = fields.One2many('probate.case.district.line', 'district_id', string='Branch District')
     status = fields.Boolean('Status', default=True)
@@ -37,8 +37,8 @@ class DisctrictLine(models.Model):
     _name = 'probate.case.district.line'
     _description = 'Probate Case District'
 
-    district_id = fields.Many2one('probate.case.district', string='High Court')
-    branch_district_id = fields.Many2one('probate.case.branch.district', string='District')
+    district_id = fields.Many2one('probate.case.district', string='High Court', ondelete='cascade')
+    branch_district_id = fields.Many2one('probate.case.branch.district', string='District', ondelete='cascade')
     branch_district_code = fields.Char('Branch District Code', related='branch_district_id.branch_district_code')
     branch_district_name = fields.Char('Branch District Name', related='branch_district_id.name')
 

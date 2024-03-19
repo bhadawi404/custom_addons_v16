@@ -16,7 +16,7 @@ class CaseStage(models.Model):
 class Parties(models.Model):
     _name = 'probate.case.parties'
 
-    case_id = fields.Many2one('probate.case', string='case')
+    case_id = fields.Many2one('probate.case', string='case', ondelete='cascade')
     name = fields.Char('Name')
     email = fields.Char('Email')
     phone = fields.Char('Phone')
@@ -24,7 +24,7 @@ class Parties(models.Model):
 class Parties(models.Model):
     _name = 'probate.case.beneficiaries'
 
-    case_id = fields.Many2one('probate.case', string='case')
+    case_id = fields.Many2one('probate.case', string='case', ondelete='cascade')
     name = fields.Char('Name')
     email = fields.Char('Email')
     phone = fields.Char('Phone')
@@ -33,7 +33,7 @@ class PaymentBeneficiaries(models.Model):
     _name = 'payment.beneficaries'
 
     date_payment = fields.Date('Payment Date')
-    case_id = fields.Many2one('probate.case', string='case')
+    case_id = fields.Many2one('probate.case', string='case', ondelete='cascade')
     beneficiaries_id = fields.Many2one('probate.case.beneficiaries', string='Beneficiaries Details')
     property_id = fields.Many2one('probate.case.property', string='Case Inventory')
     amount = fields.Float('Amount')
@@ -54,9 +54,9 @@ class ProbateCase(models.Model):
     presiding_magistrate = fields.Many2one('res.users', string='Presiding Magistrate')
     phone = fields.Char('Phone', related='presiding_magistrate.phone')
     email = fields.Char('Email', related='presiding_magistrate.email')
-    parties_involved = fields.One2many('probate.case.parties', 'case_id', string='Parties Involved', ondelete='cascade')
-    beneficiaries = fields.One2many('probate.case.beneficiaries', 'case_id', string='Beneficiaries', ondelete='cascade')
-    case_property_ids = fields.One2many('probate.case.property', 'case_id', string='Properties', ondelete='cascade')
+    parties_involved = fields.One2many('probate.case.parties', 'case_id', string='Parties Involved',)
+    beneficiaries = fields.One2many('probate.case.beneficiaries', 'case_id', string='Beneficiaries',)
+    case_property_ids = fields.One2many('probate.case.property', 'case_id', string='Properties',)
     administrator_name = fields.Many2one('res.users', string='User Clerk', default=lambda self: self.env.user,)
     email_clerk = fields.Char('Clerk email', related='administrator_name.email')
     deceased_name = fields.Char(string='Deceased Name')
@@ -79,8 +79,8 @@ class ProbateCase(models.Model):
     email_supervisor = fields.Char(string='Supervisor Email', related='supervisor_id.email')
     show_button_confirm_for_supervisor = fields.Boolean('show_button_confirm_for_supervisor', compute='_show_button_confirm_suppervisor')
     show_button_upload_document = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document')
-    document_ids = fields.One2many('probate.case.document', 'case_id', string='document',ondelete='cascade')
-    form_ids = fields.One2many('probate.case.form', 'case_id', string='form',ondelete='cascade')
+    document_ids = fields.One2many('probate.case.document', 'case_id', string='document')
+    form_ids = fields.One2many('probate.case.form', 'case_id', string='form')
     show_button_confirm_for_administrator = fields.Boolean('show_button_confirm_for_administrator', compute='_show_button_confirm_administrator')
     show_button_upload_document_administrator = fields.Boolean('show_button_upload_document', compute='_show_button_upload_document_administrator')
     hro_approval = fields.Many2one('res.users', string='HRO Approval')
@@ -89,12 +89,12 @@ class ProbateCase(models.Model):
     show_button_confirm_for_payment = fields.Boolean('show_button_confirm_for_payment', compute='_show_button_confirm_payment')
     accounting_id = fields.Many2one('res.users', string='Accounting')
     email_accounting = fields.Char(string='Accounting Email', related='accounting_id.email')
-    payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries',ondelete='cascade')
-    property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value',ondelete='cascade')
+    payment_beneficaries_ids = fields.One2many('payment.beneficaries', 'case_id', string='Payment Of Beneficaries')
+    property_value_ids = fields.One2many('probate.case.property.value', 'case_id', string='Property Value')
     show_button_closed_for_payment = fields.Boolean('show_button_closed_for_payment', compute='_show_button_closed_for_payment')
 
     #Presiding Judge
-    form_closssure_ids = fields.One2many('probate.case.form.closssure', 'case_id', string='form',ondelete='cascade')
+    form_closssure_ids = fields.One2many('probate.case.form.closssure', 'case_id', string='form')
     show_button_closed = fields.Boolean('show_button_closed', compute='_show_button_closed')
     show_button_upload_document_clossure_presiding = fields.Boolean('show_button_upload_document_clossure_presiding', compute='_show_button_upload_document_clossure_presiding')
 
@@ -563,7 +563,7 @@ class ProbateCase(models.Model):
 class ProbateCaseProperty(models.Model):
     _name = 'probate.case.property'
 
-    case_id = fields.Many2one('probate.case', string='case')
+    case_id = fields.Many2one('probate.case', string='case', ondelete='cascade')
     type_properties = fields.Selection([
         ('land', 'Land'),
         ('cash', 'Cash'),
@@ -576,7 +576,7 @@ class ProbateCaseProperty(models.Model):
 class ProbateCasePropertyValue(models.Model):
     _name = 'probate.case.property.value'
 
-    case_id = fields.Many2one('probate.case', string='case')
+    case_id = fields.Many2one('probate.case', string='case', ondelete='cascade')
     property_id = fields.Many2one('probate.case.property', string='Property')
     type_properties = fields.Selection([
         ('land', 'Land'),

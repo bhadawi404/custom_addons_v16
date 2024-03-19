@@ -9,11 +9,11 @@ class DocumentProbate(models.Model):
     _description = 'Probate Case Document'
     _rec_name = 'name'
 
-    case_id = fields.Many2one('probate.case', string='Probate')
+    case_id = fields.Many2one('probate.case', string='Probate', ondelete='cascade')
     name = fields.Char('Case')
     description = fields.Text('Description')
     attachment = fields.Binary('Attachment')
-    property_id = fields.Many2one('probate.case.property', string='Property Detail')
+    property_id = fields.Many2one('probate.case.property', string='Property Detail', ondelete='cascade')
 
 
 class FormProbate(models.Model):
@@ -21,7 +21,7 @@ class FormProbate(models.Model):
     _description = 'Probate Case Form'
     _rec_name = 'name'
 
-    case_id = fields.Many2one('probate.case', string='Probate')
+    case_id = fields.Many2one('probate.case', string='Probate', ondelete='cascade')
     name = fields.Char('Form Name')
     form_type = fields.Selection([
         ('vendor_form', 'Vendor Form'),
@@ -38,7 +38,7 @@ class FormProbate(models.Model):
     _description = 'Probate Case Form Clossure'
     _rec_name = 'name'
 
-    case_id = fields.Many2one('probate.case', string='Probate')
+    case_id = fields.Many2one('probate.case', string='Probate',ondelete='cascade')
     name = fields.Char('Form Name')
     form_type = fields.Selection([
         ('form_v', 'Form No.V'),
