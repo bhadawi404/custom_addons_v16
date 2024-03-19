@@ -566,7 +566,7 @@ class ProbateCase(models.Model):
                 })
     
     @api.onchange('branch_district_id')
-    def _onchange_get_presiding_magistrate(self): 
+    def _onchange_get_branch_district(self): 
         res = {}
         if self.branch_district_id:
             staff_ids = self.env['probate.case.branch.district'].sudo().search([('id','=', self.branch_district_id.id)])
@@ -578,10 +578,10 @@ class ProbateCase(models.Model):
         return res
     
     @api.onchange('district_id')
-    def _onchange_get_presiding_magistrate(self): 
+    def _onchange_get_district(self): 
         res = {}
         if self.district_id:
-            branch_district = self.env['probate.case.district.line'].sudo().search([('district_id','=', self.district_id.id)])
+            branch_district = self.env['probate.case.district.line'].sudo().search([('district_id','=', self.district_id.id),('branch_district_id.user_ids','in', self.env.user.ids)])
             list_branch = [(usr.id) for usr in branch_district.branch_district_id]
             res = {'domain': {'branch_district_id': [('id', 'in', list_branch)]}}
         else:
@@ -590,7 +590,7 @@ class ProbateCase(models.Model):
         return res
     
     @api.onchange('court_id')
-    def _onchange_get_presiding_magistrate(self): 
+    def _onchange_get_court(self): 
         res = {}
         if self.court_id:
             district = self.env['probate.case.district'].sudo().search([('court_id','=', self.court_id.id)])
