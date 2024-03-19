@@ -109,6 +109,12 @@ class ProbateCase(models.Model):
 
     administrator_of_state = fields.Char('Name of the Administrator of the estate')
 
+    def get_groups(self):
+        if self.env.user.has_group('porbate_case_management.group_probate_case_adminisitrator'):
+            return 'administrator'
+        else:
+            return 'not administrator'
+
     def get_state_count(self):
         """get the activity count details"""
         activity = self.env['probate.case']

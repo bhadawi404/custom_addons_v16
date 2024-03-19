@@ -41,7 +41,18 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
             self.render_dashboards();
         });
     },
-
+    //Cek Groups
+    _findgroups: function () {
+        return this._rpc({
+            model: 'probate.case',
+            method: 'get_groups',
+            args: [[]]
+        }).then(function (res) {
+            return res; // assuming res is the group information
+        }).catch(function (error) {
+            throw error; // rethrow error to be caught by caller
+        });
+    },
     render_dashboards: function () {
         var self = this;
         this._rpc({
@@ -65,65 +76,142 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
             }));
         });
         self.results = '';
-        self._rpc({
-            model: 'probate.case',
-            method: 'search_read',
-            domain: [["state", "=", 'case_to_close']],
-            context: { active_test: false },
-        }).then(function (case_to_close_stage) {
-            self._rpc({
-                model: 'probate.case',
-                method: 'search_read',
-                domain: [["state", "=", 'draft']],
-                context: { active_test: false },
-            }).then(function (draft_stage) {
+        
+        self._findgroups()
+        .then(function(group) {
+            console.log("GROUPS", group);
+            if (group === "administrator") {
+                console.log("access admin");
                 self._rpc({
                     model: 'probate.case',
                     method: 'search_read',
-                    domain: [["state", "=", 'waiting_tiss']],
+                    domain: [["state", "=", 'case_to_close']],
                     context: { active_test: false },
-                }).then(function (waiting_tiss_stage) {
+                }).then(function (case_to_close_stage) {
                     self._rpc({
                         model: 'probate.case',
                         method: 'search_read',
-                        domain: [["state", "=", 'completion_form']],
+                        domain: [["state", "=", 'draft']],
                         context: { active_test: false },
-                    }).then(function (completion_form_stage) {
+                    }).then(function (draft_stage) {
                         self._rpc({
                             model: 'probate.case',
                             method: 'search_read',
-                            domain: [["state", "=", 'pending_hro_approval']],
+                            domain: [["state", "=", 'waiting_tiss']],
                             context: { active_test: false },
-                        }).then(function (pending_hro_approval_stage) {
+                        }).then(function (waiting_tiss_stage) {
                             self._rpc({
                                 model: 'probate.case',
                                 method: 'search_read',
-                                domain: [["state", "=", 'pending_payment']],
+                                domain: [["state", "=", 'completion_form']],
                                 context: { active_test: false },
-                            }).then(function (pending_payment_stage) {
-                                // Menambahkan panggilan metode RPC untuk mencari rekaman dengan status 'closed'
+                            }).then(function (completion_form_stage) {
                                 self._rpc({
                                     model: 'probate.case',
                                     method: 'search_read',
-                                    domain: [["state", "=", 'closed']],
+                                    domain: [["state", "=", 'pending_hro_approval']],
                                     context: { active_test: false },
-                                }).then(function (closed_stage) {
-                                    self.$('.table_view_activity').html(QWeb.render('ActivityTable', {
-                                        case_to_close_stage: case_to_close_stage,
-                                        draft_stage: draft_stage,
-                                        waiting_tiss_stage: waiting_tiss_stage,
-                                        completion_form_stage: completion_form_stage,
-                                        pending_hro_approval_stage: pending_hro_approval_stage,
-                                        pending_payment_stage: pending_payment_stage,
-                                        closed_stage: closed_stage
-                                    }));
+                                }).then(function (pending_hro_approval_stage) {
+                                    self._rpc({
+                                        model: 'probate.case',
+                                        method: 'search_read',
+                                        domain: [["state", "=", 'pending_payment']],
+                                        context: { active_test: false },
+                                    }).then(function (pending_payment_stage) {
+                                        // Menambahkan panggilan metode RPC untuk mencari rekaman dengan status 'closed'
+                                        self._rpc({
+                                            model: 'probate.case',
+                                            method: 'search_read',
+                                            domain: [["state", "=", 'closed']],
+                                            context: { active_test: false },
+                                        }).then(function (closed_stage) {
+                                            self.$('.table_view_activity').html(QWeb.render('ActivityTable', {
+                                                case_to_close_stage: case_to_close_stage,
+                                                draft_stage: draft_stage,
+                                                waiting_tiss_stage: waiting_tiss_stage,
+                                                completion_form_stage: completion_form_stage,
+                                                pending_hro_approval_stage: pending_hro_approval_stage,
+                                                pending_payment_stage: pending_payment_stage,
+                                                closed_stage: closed_stage
+                                            }));
+                                        });
+                                    });
                                 });
                             });
                         });
                     });
                 });
-            });
+            } else {
+                console.log("access non admin");
+                var user = self.getSession().uid;
+                console.log("UID", user)
+                self._rpc({
+                    model: 'probate.case',
+                    method: 'search_read',
+                    domain: [["state", "=", 'case_to_close'],["presiding_magistrate", "=", user]],
+                    context: { active_test: false },
+                }).then(function (case_to_close_stage) {
+                    self._rpc({
+                        model: 'probate.case',
+                        method: 'search_read',
+                        domain: [["state", "=", 'draft'],["create_uid", "=", user]],
+                        context: { active_test: false },
+                    }).then(function (draft_stage) {
+                        self._rpc({
+                            model: 'probate.case',
+                            method: 'search_read',
+                            domain: [["state", "=", 'waiting_tiss'],["supervisor_id", "=", user]],
+                            context: { active_test: false },
+                        }).then(function (waiting_tiss_stage) {
+                            self._rpc({
+                                model: 'probate.case',
+                                method: 'search_read',
+                                domain: [["state", "=", 'completion_form'],["administrator_name", "=", user]],
+                                context: { active_test: false },
+                            }).then(function (completion_form_stage) {
+                                self._rpc({
+                                    model: 'probate.case',
+                                    method: 'search_read',
+                                    domain: [["state", "=", 'pending_hro_approval'],["hro_approval", "=", user]],
+                                    context: { active_test: false },
+                                }).then(function (pending_hro_approval_stage) {
+                                    self._rpc({
+                                        model: 'probate.case',
+                                        method: 'search_read',
+                                        domain: [["state", "=", 'pending_payment'],["accounting_id", "=", user]],
+                                        context: { active_test: false },
+                                    }).then(function (pending_payment_stage) {
+                                        // Menambahkan panggilan metode RPC untuk mencari rekaman dengan status 'closed'
+                                        self._rpc({
+                                            model: 'probate.case',
+                                            method: 'search_read',
+                                            domain: [["state", "=", 'closed'],["create_uid", "=", user]],
+                                            context: { active_test: false },
+                                        }).then(function (closed_stage) {
+                                            self.$('.table_view_activity').html(QWeb.render('ActivityTable', {
+                                                case_to_close_stage: case_to_close_stage,
+                                                draft_stage: draft_stage,
+                                                waiting_tiss_stage: waiting_tiss_stage,
+                                                completion_form_stage: completion_form_stage,
+                                                pending_hro_approval_stage: pending_hro_approval_stage,
+                                                pending_payment_stage: pending_payment_stage,
+                                                closed_stage: closed_stage
+                                            }));
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            }
+        })
+        .catch(function(error) {
+            console.error("Error while fetching groups:", error);
+            // Lakukan penanganan kesalahan di sini jika diperlukan
         });
+        
+        
     },
     click_view: function(e){
         var id = e.target.value;

@@ -287,305 +287,319 @@
     </t>
     <t t-name="ActivityTable">
         <div class="table_draft_stage">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>Draft</th>
-                    </tr>
+            <t t-if="draft_stage.length > 0"> 
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>Draft</th>
+                        </tr>
 
-                    <t t-if="draft_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
-                <t t-if="draft_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Created by</th>
-                            <th class="table_head_">Created on</th>
-                            <th class="table_head_">View</th>
-                        </tr>
+                        <t t-if="draft_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
                     </thead>
-                    <tbody>
-                        <tr t-foreach="draft_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['create_uid'][1]"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['create_date']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                    <t t-if="draft_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Created by</th>
+                                <th class="table_head_">Created on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="draft_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['create_uid'][1]"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['create_date']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
         <div class="table_today_activity">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>Awaiting For Tiss</th>
-                    </tr>
-                    <t t-if="waiting_tiss_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
-
-                <t t-if="waiting_tiss_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Assigned to</th>
-                            <th class="table_head_">Assigned on</th>
-                            <th class="table_head_">View</th>
+            <t t-if="waiting_tiss_stage.length > 0"> 
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>Awaiting For Tiss</th>
                         </tr>
+                        <t t-if="waiting_tiss_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
                     </thead>
-                    <tbody>
-                        <tr t-foreach="waiting_tiss_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['supervisor_id']['1']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['approve_date_creator']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
 
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                    <t t-if="waiting_tiss_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Assigned to</th>
+                                <th class="table_head_">Assigned on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="waiting_tiss_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['supervisor_id']['1']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['approve_date_creator']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
 
         <div class="table_main_view">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>Completion Of Forms</th>
-                    </tr>
-                    <t t-if="completion_form_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
+            <t t-if="completion_form_stage.length > 0"> 
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>Completion Of Forms</th>
+                        </tr>
+                        <t t-if="completion_form_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
+                    </thead>
 
-                <t t-if="completion_form_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Assigned to</th>
-                            <th class="table_head_">Assigned on</th>
-                            <th class="table_head_">View</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr t-foreach="completion_form_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['administrator_name']['1']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['approve_date_supervisor']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                    <t t-if="completion_form_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Assigned to</th>
+                                <th class="table_head_">Assigned on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="completion_form_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['administrator_name']['1']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['approve_date_supervisor']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
         <div class="table_main_view">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>Pending HRO Approval</th>
-                    </tr>
-                    <t t-if="pending_hro_approval_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
-                <t t-if="pending_hro_approval_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Assigned to</th>
-                            <th class="table_head_">Assigned on</th>
-                            <th class="table_head_">View</th>
+            <t t-if="pending_hro_approval_stage.length > 0"> 
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>Pending HRO Approval</th>
                         </tr>
+                        <t t-if="pending_hro_approval_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
                     </thead>
-                    <tbody>
-                        <tr t-foreach="pending_hro_approval_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['hro_approval']['1']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['approve_date_administrator']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                    <t t-if="pending_hro_approval_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Assigned to</th>
+                                <th class="table_head_">Assigned on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="pending_hro_approval_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['hro_approval']['1']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['approve_date_administrator']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
         <div class="table_main_view">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>Pending Payment</th>
-                    </tr>
-                    <t t-if="pending_payment_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
-                <t t-if="pending_payment_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Assigned to</th>
-                            <th class="table_head_">Assigned on</th>
-                            <th class="table_head_">View</th>
+            <t t-if="pending_payment_stage.length > 0">            
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>Pending Payment</th>
                         </tr>
+                        <t t-if="pending_payment_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
                     </thead>
-                    <tbody>
-                        <tr t-foreach="pending_payment_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['accounting_id']['1']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['approve_date_hro']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
+                    <t t-if="pending_payment_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Assigned to</th>
+                                <th class="table_head_">Assigned on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="pending_payment_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['accounting_id']['1']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['approve_date_hro']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
 
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
         <div class="table_main_view">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>To Close</th>
-                    </tr>
-                    <t t-if="case_to_close_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
-                <t t-if="case_to_close_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Assigned to</th>
-                            <th class="table_head_">Assigned on</th>
-                            <th class="table_head_">View</th>
+            <t t-if="case_to_close_stage.length > 0"> 
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>To Close</th>
                         </tr>
+                        <t t-if="case_to_close_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
                     </thead>
-                    <tbody>
-                        <tr t-foreach="case_to_close_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['presiding_magistrate']['1']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['approve_date_accounting']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
+                    <t t-if="case_to_close_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Assigned to</th>
+                                <th class="table_head_">Assigned on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="case_to_close_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['presiding_magistrate']['1']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['approve_date_accounting']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
 
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
         <div class="table_main_view">
-            <table cellspacing="10" width="100%"
-                   style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
-                <thead>
-                    <tr>
-                        <th>Closed</th>
-                    </tr>
-                    <t t-if="closed_stage == ''">
-                        <td>No Data Available</td>
-                    </t>
-                </thead>
-                <t t-if="closed_stage != ''">
-                    <thead class="table table-bordered mt32">
-                        <tr class="table_head">
-                            <th class="table_head_">Name</th>
-                            <th class="table_head_">Closed by</th>
-                            <th class="table_head_">Closed on</th>
-                            <th class="table_head_">View</th>
+            <t t-if="closed_stage.length > 0"> 
+                <table cellspacing="10" width="100%"
+                    style="padding: 24px; background-color: white; color: #454748; border-collapse:separate;">
+                    <thead>
+                        <tr>
+                            <th>Closed</th>
                         </tr>
+                        <t t-if="closed_stage == ''">
+                            <td>No Data Available</td>
+                        </t>
                     </thead>
-                    <tbody>
-                        <tr t-foreach="closed_stage" t-as="line">
-                            <td>
-                                <t t-esc="line['name']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['presiding_magistrate']['1']"/>
-                            </td>
-                            <td>
-                                <t t-esc="line['approve_date_closed']"/>
-                            </td>
-                            <td class="click-view">
-                                <button t-att-value="line['id']"
-                                        style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
-                                    View
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </t>
-            </table>
+                    <t t-if="closed_stage != ''">
+                        <thead class="table table-bordered mt32">
+                            <tr class="table_head">
+                                <th class="table_head_">Name</th>
+                                <th class="table_head_">Closed by</th>
+                                <th class="table_head_">Closed on</th>
+                                <th class="table_head_">View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="closed_stage" t-as="line">
+                                <td>
+                                    <t t-esc="line['name']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['presiding_magistrate']['1']"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line['approve_date_closed']"/>
+                                </td>
+                                <td class="click-view">
+                                    <button t-att-value="line['id']"
+                                            style="border-radius: 8px; background-color: #c4c4f2;width: 100px;height: 35px;">
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </t>
+                </table>
+            </t>
         </div>
     </t>
 </templates>
