@@ -6,7 +6,7 @@
     'category': 'Porbate/Website',
     'author': "Ahmad Badawi",
     'summary': 'Porbate Case Management - v1.0',
-    'depends': ['base','contacts'],
+    'depends': ['base','contacts','mail'],
     'data': [
         'views/dashboard.xml',
         'views/reporting.xml',
