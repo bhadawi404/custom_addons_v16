@@ -148,44 +148,44 @@ odoo.define('porbate_case_management.activity_dashboard', function (require) {
                 self._rpc({
                     model: 'probate.case',
                     method: 'search_read',
-                    domain: [["state", "=", 'case_to_close'],["presiding_magistrate", "=", user]],
+                    domain: [["state", "=", 'case_to_close'],["presiding_magistrate", "=", user],["branch_district_id.user_ids", "in", user]],
                     context: { active_test: false },
                 }).then(function (case_to_close_stage) {
                     self._rpc({
                         model: 'probate.case',
                         method: 'search_read',
-                        domain: [["state", "=", 'draft'],["create_uid", "=", user]],
+                        domain: [["state", "=", 'draft'],["create_uid", "=", user],["branch_district_id.user_ids", "in", user]],
                         context: { active_test: false },
                     }).then(function (draft_stage) {
                         self._rpc({
                             model: 'probate.case',
                             method: 'search_read',
-                            domain: [["state", "=", 'waiting_tiss'],["supervisor_id", "=", user]],
+                            domain: [["state", "=", 'waiting_tiss'],["supervisor_id", "=", user],["branch_district_id.user_ids", "in", user]],
                             context: { active_test: false },
                         }).then(function (waiting_tiss_stage) {
                             self._rpc({
                                 model: 'probate.case',
                                 method: 'search_read',
-                                domain: [["state", "=", 'completion_form'],["administrator_name", "=", user]],
+                                domain: [["state", "=", 'completion_form'],["administrator_name", "=", user],["branch_district_id.user_ids", "in", user]],
                                 context: { active_test: false },
                             }).then(function (completion_form_stage) {
                                 self._rpc({
                                     model: 'probate.case',
                                     method: 'search_read',
-                                    domain: [["state", "=", 'pending_hro_approval'],["hro_approval", "=", user]],
+                                    domain: [["state", "=", 'pending_hro_approval'],["hro_approval", "=", user],["branch_district_id.user_ids", "in", user]],
                                     context: { active_test: false },
                                 }).then(function (pending_hro_approval_stage) {
                                     self._rpc({
                                         model: 'probate.case',
                                         method: 'search_read',
-                                        domain: [["state", "=", 'pending_payment'],["accounting_id", "=", user]],
+                                        domain: [["state", "=", 'pending_payment'],["accounting_id", "=", user],["branch_district_id.user_ids", "in", user]],
                                         context: { active_test: false },
                                     }).then(function (pending_payment_stage) {
                                         // Menambahkan panggilan metode RPC untuk mencari rekaman dengan status 'closed'
                                         self._rpc({
                                             model: 'probate.case',
                                             method: 'search_read',
-                                            domain: [["state", "=", 'closed'],["create_uid", "=", user]],
+                                            domain: [["state", "=", 'closed'],["create_uid", "=", user],["branch_district_id.user_ids", "in", user]],
                                             context: { active_test: false },
                                         }).then(function (closed_stage) {
                                             self.$('.table_view_activity').html(QWeb.render('ActivityTable', {
