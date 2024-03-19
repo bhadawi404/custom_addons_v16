@@ -292,7 +292,7 @@
         <field name="res_model">probate.case</field>
         <field name="view_mode">kanban,tree,form,search</field>
         <field name="context">{'search_default_group_by_state': 1}</field>
-        <field name="domain">[]</field>
+        <field name="domain">[('branch_district_id.user_ids', 'in', uid)]</field>
     </record>
 
 </odoo>

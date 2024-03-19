@@ -48,6 +48,7 @@ class BranchDisctrict(models.Model):
 
     branch_district_code = fields.Char('Branch District Code')
     name = fields.Char('Branch District Name')
+    user_ids = fields.Many2many('res.users', 'res_branch_users_rel','branch_id','name', 'User')
 
     def name_get(self):
         res = []

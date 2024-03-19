@@ -79,6 +79,7 @@
             <tree string="Branch District" editable="bottom">
                 <field name="branch_district_code" />
                 <field name="name" />
+                <field name="user_ids" string="Staff" widget="many2many_tags"/>
             </tree>
         </field>
     </record>
