@@ -121,66 +121,44 @@ class ProbateCase(models.Model):
         value_property = self.env['probate.case.property.value']
         payment_beneficaries = self.env['payment.beneficaries']
         domain = []
-        if self.env.user._is_admin():
-            user_ids = self.env['probate.case.branch.district'].sudo().search([('user_ids','in', self.env.user.ids)])
-            if user_ids:
-                domain.append(('branch_district_id.user_ids', 'in', self.env.user.id))
-                all = activity.with_context(active_test=False).search(domain)
-                draft = all.filtered(lambda x: x.state == 'draft')
-                waiting_tiss = all.filtered(lambda x: x.state == 'waiting_tiss')
-                completion_form = all.filtered(lambda x: x.state == 'completion_form')
-                pending_hro_approval = all.filtered(lambda x: x.state == 'pending_hro_approval')
-                pending_payment = all.filtered(lambda x: x.state == 'pending_payment')
-                closed = all.filtered(lambda x: x.state == 'closed')
-                case_to_closed = all.filtered(lambda x: x.state == 'case_to_close')
-                case = activity.sudo().search([('branch_district_id.user_ids','in',self.env.user.ids)])
-                total = 0
-                for total_inventory in case:
-                    total += total_inventory.total_value
+        # if self.env.user._is_admin():
+        #     user_ids = self.env['probate.case.branch.district'].sudo().search([('user_ids','in', self.env.user.ids)])
+        #     if user_ids:
+        #         domain.append(('branch_district_id.user_ids', 'in', self.env.user.id))
+        #     else:
+        #         domain = domain
+        # else:
+        #     domain.append(('branch_district_id.user_ids', 'in', self.env.user.id))
+        has_group_administrator = self.env.user.has_group('porbate_case_management.group_probate_case_adminisitrator')
+        if has_group_administrator:
+            domain = domain
+            all = activity.with_context(active_test=False).search(domain)
+            draft = all.filtered(lambda x: x.state == 'draft')
+            waiting_tiss = all.filtered(lambda x: x.state == 'waiting_tiss')
+            completion_form = all.filtered(lambda x: x.state == 'completion_form')
+            pending_hro_approval = all.filtered(lambda x: x.state == 'pending_hro_approval')
+            pending_payment = all.filtered(lambda x: x.state == 'pending_payment')
+            closed = all.filtered(lambda x: x.state == 'closed')
+            case_to_closed = all.filtered(lambda x: x.state == 'case_to_close')
+            case = activity.sudo().search(domain)
+            total = 0
+            for total_inventory in case:
+                total += total_inventory.total_value
 
-                paid_value = payment_beneficaries.sudo().search(([('case_id','!=',False),('case_id.branch_district_id.user_ids','in',self.env.user.ids)]))
-                total_paid = 0
-                for paid in paid_value:
-                    total_paid += paid.amount
-                
-                partially_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'partial'),('case_id.branch_district_id.user_ids','in',self.env.user.ids)]))
-                total_partially = 0
-                for partially in partially_value:
-                    total_partially += partially.balance
+            paid_value = payment_beneficaries.sudo().search(([('case_id','!=',False)]))
+            total_paid = 0
+            for paid in paid_value:
+                total_paid += paid.amount
+            
+            partially_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'partial')]))
+            total_partially = 0
+            for partially in partially_value:
+                total_partially += partially.balance
 
-                not_paid_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'pending_payment'),('case_id.branch_district_id.user_ids','in',self.env.user.ids)]))
-                total_not_paid = 0
-                for not_paid in not_paid_value:
-                    total_not_paid += not_paid.balance
-            else:
-                domain = domain
-                all = activity.with_context(active_test=False).search(domain)
-                draft = all.filtered(lambda x: x.state == 'draft')
-                waiting_tiss = all.filtered(lambda x: x.state == 'waiting_tiss')
-                completion_form = all.filtered(lambda x: x.state == 'completion_form')
-                pending_hro_approval = all.filtered(lambda x: x.state == 'pending_hro_approval')
-                pending_payment = all.filtered(lambda x: x.state == 'pending_payment')
-                closed = all.filtered(lambda x: x.state == 'closed')
-                case_to_closed = all.filtered(lambda x: x.state == 'case_to_close')
-                case = activity.sudo().search([('branch_district_id.user_ids','in',self.env.user.ids)])
-                total = 0
-                for total_inventory in case:
-                    total += total_inventory.total_value
-
-                paid_value = payment_beneficaries.sudo().search(([('case_id','!=',False)]))
-                total_paid = 0
-                for paid in paid_value:
-                    total_paid += paid.amount
-                
-                partially_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'partial')]))
-                total_partially = 0
-                for partially in partially_value:
-                    total_partially += partially.balance
-
-                not_paid_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'pending_payment')]))
-                total_not_paid = 0
-                for not_paid in not_paid_value:
-                    total_not_paid += not_paid.balance
+            not_paid_value = value_property.sudo().search(([('case_id','!=',False),('state','=', 'pending_payment')]))
+            total_not_paid = 0
+            for not_paid in not_paid_value:
+                total_not_paid += not_paid.balance
         else:
             domain.append(('branch_district_id.user_ids', 'in', self.env.user.id))
             all = activity.with_context(active_test=False).search(domain)
@@ -210,6 +188,7 @@ class ProbateCase(models.Model):
             total_not_paid = 0
             for not_paid in not_paid_value:
                 total_not_paid += not_paid.balance
+
         
         res = {
             'len_all': len(all),
