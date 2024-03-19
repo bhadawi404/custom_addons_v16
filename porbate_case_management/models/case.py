@@ -137,7 +137,7 @@ class ProbateCase(models.Model):
         pending_payment = all.filtered(lambda x: x.state == 'pending_payment')
         closed = all.filtered(lambda x: x.state == 'closed')
         case_to_closed = all.filtered(lambda x: x.state == 'case_to_close')
-        case = activity.sudo().search(domain)
+        case = activity.sudo().search([('branch_district_id.user_ids','in',self.env.user.ids)])
         total = 0
         for total_inventory in case:
             total += total_inventory.total_value
