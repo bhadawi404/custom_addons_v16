@@ -223,18 +223,22 @@ class ProbateCase(models.Model):
     def send_email_notification(self, stage=None):
         if stage == 'waiting_tiss':
             to = self.supervisor_id.name
+            cc = self.presiding_magistrate.email
             email_to = self.supervisor_id.email
             message = f"You have been assigned to complete the Tiss Attachment Stage to the Case Number : {self.name}"
         if stage == 'completion_form':
             to = self.administrator_name.name
+            cc = self.presiding_magistrate.email
             email_to = self.administrator_name.email
             message = f"You have been assigned to complete the Form Attachment Stage to the Case Number : {self.name}"
         if stage == 'pending_hro_approval':
             to = self.hro_approval.name
+            cc = self.presiding_magistrate.email
             email_to = self.hro_approval.email
             message = f"You have been assigned to complete the approval for Case Number: {self.name}"
         if stage == 'pending_payment':
             to = self.accounting_id.name
+            cc = self.presiding_magistrate.email
             email_to = self.accounting_id.email
             message = f"You have been assigned to complete the payment management of Case: {self.name}"
         if stage == 'case_to_close':
@@ -261,9 +265,9 @@ class ProbateCase(models.Model):
                 'action_url': action_url,
             }
             if rec.state == 'closed':
-                template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'recipient_ids': email_to}, email_layout_xmlid='mail.mail_notification_light')
+                template_approval.with_context(**template_context).sudo().send_mail(rec.id, force_send=True, email_values={'recipient_ids': email_to}, email_layout_xmlid='mail.mail_notification_light')
             else:
-                template_approval.with_context(**template_context).send_mail(rec.id, force_send=True, email_values={'email_to': email_to}, email_layout_xmlid='mail.mail_notification_light')
+                template_approval.with_context(**template_context).sudo().send_mail(rec.id, force_send=True, email_values={'email_to': email_to, 'email_cc': cc}, email_layout_xmlid='mail.mail_notification_light')
         return {}
     #STAGE SUBMIT
     def action_submit(self):
