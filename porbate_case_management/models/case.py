@@ -111,9 +111,10 @@ class ProbateCase(models.Model):
 
     @api.model
     def case_you_action(self):
-        action = self.env["ir.actions.actions"]._for_xml_id("porbate_case_management.case_you_action")
+        action = self.env["ir.actions.actions"]._for_xml_id("porbate_case_management.case_action")
         return self._action_update_to_case(action)
 
+    @api.model
     def _action_update_to_case(self, action):
         if self.user_has_groups('porbate_case_management.group_probate_case_adminisitrator'):
             action['domain'] = []
