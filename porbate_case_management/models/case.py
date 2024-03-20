@@ -120,8 +120,7 @@ class ProbateCase(models.Model):
             action['domain'] = []
         else:
              action['domain'] = [('branch_district_id.user_ids','in',self.env.user.ids)]
-        action_context = safe_eval(action['context'], {'search_default_group_by_state': 1})
-        action['context'] = action_context
+        action['context'] = {'search_default_group_by_state': 1}
         return action
     
     def get_groups(self):
