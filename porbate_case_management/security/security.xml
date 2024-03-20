@@ -21,4 +21,9 @@
         <field name="comment">the user will have access to all probate case of everyone in the probate case.</field>
       </record>
   </data>
+  <data noupdate="1">
+    <record id="base.default_user" model="res.users">
+        <field name="groups_id" eval="[(4,ref('porbate_case_management.group_probate_case_user'))]"/>
+    </record>
+    </data>
 </odoo>
