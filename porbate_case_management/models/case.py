@@ -602,9 +602,9 @@ class ProbateCase(models.Model):
             has_group_administrator = self.env.user.has_group('porbate_case_management.group_probate_case_adminisitrator')
 
             if has_group_administrator:
-                branch_district = self.env['probate.case.district.line'].sudo().search([('district_id','=', self.district_id.id),('branch_district_id.user_ids','in', self.env.user.ids)])
-            else:
                 branch_district = self.env['probate.case.district.line'].sudo().search([('district_id','=', self.district_id.id)])
+            else:
+                branch_district = self.env['probate.case.district.line'].sudo().search([('district_id','=', self.district_id.id),('branch_district_id.user_ids','in', self.env.user.ids)])
             list_branch = [(usr.id) for usr in branch_district.branch_district_id]
             res = {'domain': {'branch_district_id': [('id', 'in', list_branch)]}}
         else:
