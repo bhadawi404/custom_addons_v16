@@ -2,7 +2,7 @@
 <odoo>
     <menuitem id="menu_probate_case_root" name="Probate Case Management" sequence="1"/>
     <menuitem id="menu_case_dashboard" name="Dashboard" parent="porbate_case_management.menu_probate_case_root" sequence="1" action="porbate_case_management.dashboard_action_dashboard"/>
-    <menuitem id="menu_case_root" name="Case" parent="porbate_case_management.menu_probate_case_root" sequence="2" action="porbate_case_management.case_action"/>
+    <menuitem id="menu_case_root" name="Case" parent="porbate_case_management.menu_probate_case_root" sequence="2" action="porbate_case_management.case_you_action"/>
     <!--Reporting-->
     <menuitem id="menu_reporting" name="Reporting" parent="porbate_case_management.menu_probate_case_root" sequence="3"/>
         <menuitem id="menu_reporting_beneficaries" name="Report Beneficaries" parent="porbate_case_management.menu_reporting" sequence="1" action="porbate_case_management.reporting_beneficaries_action"/>

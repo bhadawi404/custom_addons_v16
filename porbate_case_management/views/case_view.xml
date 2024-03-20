@@ -295,4 +295,12 @@
         <field name="domain">[('branch_district_id.user_ids', 'in', uid)]</field>
     </record>
 
+    <record id="case_you_action" model="ir.actions.server">
+        <field name="name">Probate Case: My Case</field>
+        <field name="model_id" ref="model_probate_case"/>
+        <field name="state">code</field>
+        <field name="groups_id"  eval="[(4, ref('base.group_user'))]"/>
+        <field name="code">action = model.case_you_action()</field>
+    </record>
+
 </odoo>

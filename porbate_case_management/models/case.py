@@ -109,6 +109,18 @@ class ProbateCase(models.Model):
 
     administrator_of_state = fields.Char('Name of the Administrator of the estate')
 
+    @api.model
+    def case_you_action(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("porbate_case_management.case_you_action")
+        return self._action_update_to_case(action)
+
+    def _action_update_to_case(self, action):
+        if self.user_has_groups('porbate_case_management.group_probate_case_adminisitrator'):
+            action['domain'] = []
+        else:
+             action['domain'] = [('branch_district_id.user_ids','in',self.env.user.ids)]
+        return action
+    
     def get_groups(self):
         if self.env.user.has_group('porbate_case_management.group_probate_case_adminisitrator'):
             return 'administrator'
