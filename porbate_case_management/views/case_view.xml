@@ -287,13 +287,13 @@
             </search>
         </field>
     </record>
-    <record id="case_action" model="ir.actions.act_window">
+    <!-- <record id="case_action" model="ir.actions.act_window">
         <field name="name">Case</field>
         <field name="res_model">probate.case</field>
         <field name="view_mode">kanban,tree,form,search</field>
         <field name="context">{'search_default_group_by_state': 1}</field>
         <field name="domain">[('branch_district_id.user_ids', 'in', uid)]</field>
-    </record>
+    </record> -->
 
     <record id="case_you_action" model="ir.actions.server">
         <field name="name">Probate Case: My Case</field>
