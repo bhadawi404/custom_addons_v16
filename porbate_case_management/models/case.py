@@ -117,10 +117,11 @@ class ProbateCase(models.Model):
     @api.model
     def _action_update_to_case(self, action):
         if self.user_has_groups('porbate_case_management.group_probate_case_adminisitrator'):
-            action['domain'] = []
+            action_params = {'domain': []}
         else:
-             action['domain'] = [('branch_district_id.user_ids','in',self.env.user.ids)]
-        action['context'] = {'search_default_group_by_state': 1}
+            action_params = {'domain': [('branch_district_id.user_ids', 'in', self.env.user.ids)]}
+        action_params['context'] = {'search_default_group_by_state': 1}
+        action.update(action_params)
         return action
     
     def get_groups(self):
