@@ -617,7 +617,7 @@ class ProbateCase(models.Model):
         res = {}
         if self.court_id:
             district = self.env['probate.case.district'].sudo().search([('court_id','=', self.court_id.id)])
-            list_district = [(usr.id) for usr in district.court_id]
+            list_district = [(usr.id) for usr in district]
             res = {'domain': {'district_id': [('id', 'in', list_district)]}}
         else:
             res = {'domain': {'district_id': [('id', '=', False)]},
