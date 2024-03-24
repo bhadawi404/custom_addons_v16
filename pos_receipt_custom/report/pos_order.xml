@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="add_print_pos_receipt_from_pos_order_view_ecs" model="ir.ui.view">
+		<field name="name">add.print.pos.receipt.from.pos.order.view.ecs</field>
+		<field name="model">pos.order</field>
+		<field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//header" position="inside">
+				<button name="print_mai_pos_receipt_custom" string="POS Receipt" type="object" states="paid,done,invoiced" />        			
+       		</xpath>
+		</field>
+	</record>
+	<report 
+		id='action_print_mai_pos_receipt_custom'
+		string="POS Receipt"
+        model="pos.order" 
+        report_type="qweb-pdf"
+        file="pos_receipt_custom.report_receipt" 
+        name="pos_receipt_custom.report_receipt"
+        print_report_name="'POS Order Receipt - %s' % (object.name)"
+        paperformat="pos_receipt_custom.paperformat_pos_receipt_from_pos_order"
+        menu="False"
+	/>
+</odoo>

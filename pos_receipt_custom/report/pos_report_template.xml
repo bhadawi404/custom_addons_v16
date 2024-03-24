@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_mai_pos_receipt_custom_document">
+		<t t-call="web.basic_layout">
+			<t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+			<t t-foreach="docs" t-as="o">
+				<div class="page" style="font-size: 15px">
+					<div style="text-align:center;max-width:70%;margin:auto;">
+						<img t-if="o.company_id.logo"
+							t-att-src="'data:image/png;base64,%s' % o.company_id.logo.decode('ascii')"
+							style="max-height: 100px;width:auto;max-width:100%;margin:10px auto;" />
+					</div>
+					<div style="text-align:center;">
+						<h3>
+							<div>
+								<t t-esc="o.company_id.name" />
+							</div>
+						</h3>
+						<div style="text-align:center;">
+							<t t-if='o.company_id.vat'>
+								<div>
+									ABN:
+									<span t-field='o.company_id.vat' />
+								</div>
+							</t>
+							<t t-if="o.company_id.phone">
+								Phone:
+								<span t-field="o.company_id.phone" />
+							</t>
+							<t t-if="o.company_id.website">
+								<br />
+								website :
+								<span t-field="o.company_id.website" />
+							</t>
+							<t t-if="o.user_id">
+								<br />
+								User :
+								<span t-field="o.user_id.name" />
+							</t>
+							<br />
+							<t t-if="o.date_order">
+								<br />
+								Date:
+								<span t-field="o.date_order" t-field-option='{"widget":"date"}'></span>
+							</t>
+							<t t-if="o.partner_id">
+								<br />
+								Customer :
+								<span t-field="o.partner_id.name" />
+							</t>
+							<t t-if="o.partner_id.phone">
+								<br />
+								Phone :
+								<span t-field="o.partner_id.phone" />
+							</t>
+						</div>
+					</div>
+					<div class="col-md-7" style="text-align:center;">
+						<strong>
+							<t t-if="o.name">
+								No.
+								<t t-esc="o.name"></t>
+							</t>
+						</strong>
+					</div>
+					<br />
+					<div>
+						<table class="table table-condensed" style="border-collapse: collapse; line-height: 15px;">
+							<thead>
+								<tr style="border-bottom: 2px solid black; text-align:left;">  
+									<th width="40%">Description</th>
+									<th width="10%">Qty</th>
+									<th width="30%">Price UOM</th>
+									<th width="20%">Price</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr t-foreach="o.lines" t-as="line">
+									<td width="40%" style="text-align:left;">
+										<span t-field="line.product_id.name" />
+										<t t-if="line.discount">
+											With a (
+											<span t-field="line.discount" />
+											)% discount.
+										</t>
+									</td>
+									<td width="10%" style="text-align:right;">
+										<span t-esc="int(float(line.qty))" /><!-- <span t-field="line.product_uom"/> -->
+									</td>
+									<td width="30%" style="text-align:right;">
+										<span t-field="line.price_unit"
+											t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}' />
+									<!-- <span t-field="line.product_id.uom_id.name" /> -->
+									</td>
+									<td width="20%" style="text-align:right;">
+										<span t-esc="line.price_unit*line.qty"
+											t-esc-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}' />
+										<t t-if="line.discount">
+											(
+											<span t-field="line.discount"
+												t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}' />
+											)
+										</t>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div>
+						<table class="table table-condensed" style="line-height: 15px;">
+							<thead>
+								<tr class="text-right">
+									<td class="text-left" width="80%">
+										<strong>Taxes</strong>
+									</td>
+									<td class="text-left" width="20%">
+										<span t-esc="o.amount_tax"
+											t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.pricelist_id.currency_id&quot;}" />
+									</td>
+								</tr>
+							</thead>
+							<thead>
+								<tr class="text-right">
+									<td class="text-left" width="80%">
+										<strong>Total</strong>
+									</td>
+									<td class="text-left" width="20%">
+										<strong t-esc="o.amount_total"
+											t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.pricelist_id.currency_id&quot;}" />
+									</td>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<div>
+						<table class="table table-condensed" style="line-height: 15px;">
+							<thead>
+								<tr style="border-bottom:0px solid;">
+									<th class="text-left" width="80%">Payment Mode</th>
+									<th class="text-right" width="20%">Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr t-foreach="o.payment_ids" t-as="d"
+									style="border-bottom:1px solid;">
+									<td class="text-left" width="80%">
+										<strong><span t-esc="d.payment_method_id.name" /></strong>
+									</td>
+									<td class="text-right" width="20%">
+										<span t-esc="d.amount"
+											t-esc-options='{"widget": "monetary"}' />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div  style="text-align:center;">
+					<strong><span t-field="o.company_id.name" /></strong>
+					<br />
+					<span t-if="o.company_id.street">
+						<span t-field="o.company_id.street" />
+						,
+					</span>
+					<span t-if="o.company_id.street2">
+						<span t-field="o.company_id.street2" />
+					</span>
+					<span t-if="o.company_id.city">
+						<br />
+						<span t-field="o.company_id.city" />
+						,
+					</span>
+					<span t-if="o.company_id.state_id">
+						<span t-field="o.company_id.state_id.name" />
+					</span>
+					<span t-if="o.company_id.zip">
+						 -
+						<span t-field="o.company_id.zip" />
+					</span>
+					<span t-if="o.company_id.country_id">
+						<br />
+						<span t-field="o.company_id.country_id.name" />
+					</span>
+				</div>
+			</t>
+		</t>
+	</template>
+	<template id="report_receipt">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="pos_receipt_custom.report_mai_pos_receipt_custom_document"
+					t-lang="doc.partner_id.lang" />
+			</t>
+		</t>
+	</template>
+</odoo>
