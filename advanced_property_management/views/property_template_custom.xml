@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="property_custom" name="property_custom">
+        <t t-call="website.layout">
+            <t t-set="title">Properties</t>
+            <div class="oe_structure">
+                <br />
+                <div class="container">
+                    <div class="row g-0 gx-5 align-items-end">
+                        <div class="col-lg-6">
+                            <div class="text-start mx-auto mb-5 wow slideInLeft"
+                                data-wow-delay="0.1s">
+                                <h1 class="mb-3">Property Listing</h1>
+                                <p>Eirmod sed ipsum dolor sit rebum labore magna erat. Tempor ut
+                                    dolore lorem kasd vero ipsum sit eirmod sit diam justo sed
+                                    rebum.</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 text-start text-lg-end wow slideInRight"
+                            data-wow-delay="0.1s">
+                            <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
+                                <li class="nav-item me-2">
+                                    <a class="btn btn-outline-primary active" data-bs-toggle="pill"
+                                        href="#tab-1">All</a>
+                                </li>
+                                <li class="nav-item me-2">
+                                    <a class="btn btn-outline-primary" data-bs-toggle="pill"
+                                        href="#tab-2">For Sale</a>
+                                </li>
+                                <li class="nav-item me-2">
+                                    <a class="btn btn-outline-primary" data-bs-toggle="pill"
+                                        href="#tab-3">For Tenancy</a>
+                                </li>
+                                <li class="nav-item me-0">
+                                    <a class="btn btn-outline-primary" data-bs-toggle="pill"
+                                        href="#tab-4">For Auction</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="row g-4">
+                                <t t-foreach="property_ids" t-as="property">
+                                    <t t-if="property.state == 'available'">
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp"
+                                            t-att-data-property_id="property.id">
+                                            <div class="card property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <t t-if="property.image">
+                                                        <img
+                                                            t-att-src="image_data_uri(property.image)"
+                                                            class="card-img-top"
+                                                            alt="..." />
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_sale'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Sale
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_tenancy'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Tenancy
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_auction'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Auction
+                                                        </div>
+                                                    </t>
+
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        <t t-esc="property.property_type" />
+                                                    </div>
+                                                </div>
+                                                <div class="p-4 pb-0">
+                                                    <h5 class="text-primary mb-3">
+                                                        <span t-esc="property.unit_price"
+                                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                    </h5>
+                                                    <p class="d-block h5 mb-2">
+                                                        <t t-esc="property.name" />
+                                                    </p>
+                                                    <p><i class="fa fa-map text-primary me-2"></i><t
+                                                            t-esc="property.street" />,<t
+                                                            t-esc="property.street2" />,<t
+                                                            t-esc="property.city" />, <t
+                                                            t-esc="property.state_id.name" />
+                                                <t
+                                                            t-esc="property.zip" /></p>
+                                                    <t t-if="property.state == 'sold'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-danger">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'for sale'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-success">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'for_rent'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-primary">
+                                                            <t
+                                                                t-esc="property.state.replace('_', ' ')" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'booked'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-warning">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'available'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-info">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+
+                                                </div>
+                                                <br />
+
+                                                <div class="d-flex border-top">
+                                                    <t t-if="property.parking != 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-stop text-primary me-2"></i><t
+                                                                t-esc="property.bedroom" /> Parking</small>
+                                                    </t>
+                                                    <t t-if="property.parking == 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-ruler-combined text-primary me-2"></i>0
+                                                            Parking</small>
+                                                    </t>
+                                                    <t t-if="property.bedroom != 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i><t
+                                                                t-esc="property.bedroom" /> Bed</small>
+                                                    </t>
+                                                    <t t-if="property.bedroom == 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i>0
+                                                            Bed</small>
+                                                    </t>
+
+                                                    <t t-if="property.bathroom != 0">
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i><t
+                                                                t-esc="property.bathroom" /> Bath</small>
+                                                    </t>
+                                                    <t t-if="property.bathroom == 0">
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i>0
+                                                            Bath</small>
+                                                    </t>
+
+                                                </div>
+                                                <a t-att-href="'/property/' + str(property.id)"
+                                                    style="border-radius: 0;"
+                                                    class="btn btn-primary py-2 px-3">See details</a>
+                                            </div>
+
+                                        </div>
+
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div id="tab-2" class="tab-pane fade show p-0">
+                            <div class="row g-4">
+                                <t t-if="property_ids">
+                                    <t t-foreach="property_ids"
+                                        t-as="property">
+                                        <t t-if="property.state == 'available'">
+                                            <t t-if="property.sale_rent == 'for_sale'">
+                                                <div class="col-lg-4 col-md-6 wow fadeInUp"
+                                                    t-att-data-property_id="property.id">
+                                                    <div
+                                                        class="card property-item rounded overflow-hidden">
+                                                        <div
+                                                            class="position-relative overflow-hidden">
+                                                            <t t-if="property.image">
+                                                                <img
+                                                                    t-att-src="image_data_uri(property.image)"
+                                                                    class="card-img-top"
+                                                                    alt="..." />
+                                                            </t>
+                                                            <t
+                                                                t-if="property.sale_rent == 'for_sale'">
+                                                                <div
+                                                                    class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                                    For Sale
+                                                                </div>
+                                                            </t>
+                                                            <t
+                                                                t-if="property.sale_rent == 'for_tenancy'">
+                                                                <div
+                                                                    class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                                    For Tenancy
+                                                                </div>
+                                                            </t>
+                                                            <t
+                                                                t-if="property.sale_rent == 'for_auction'">
+                                                                <div
+                                                                    class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                                    For Auction
+                                                                </div>
+                                                            </t>
+
+                                                            <div
+                                                                class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                                <t t-esc="property.property_type" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="p-4 pb-0">
+                                                            <h5 class="text-primary mb-3">
+                                                                <span t-esc="property.unit_price"
+                                                                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                            </h5>
+                                                            <p class="d-block h5 mb-2">
+                                                                <t t-esc="property.name" />
+                                                            </p>
+                                                            <p><i
+                                                                    class="fa fa-map text-primary me-2"></i><t
+                                                                    t-esc="property.street" />,<t
+                                                                    t-esc="property.street2" />,<t
+                                                                    t-esc="property.city" />, <t
+                                                                    t-esc="property.state_id.name" />
+                                                <t
+                                                                    t-esc="property.zip" /></p>
+                                                            <t
+                                                                t-if="property.state == 'sold'">
+                                                                <span id="p_type"
+                                                                    style="text-transform: capitalize;"
+                                                                    class="badge badge-pill bg-danger">
+                                                                    <t
+                                                                        t-esc="property.state" />
+                                                                </span>
+                                                            </t>
+                                                            <t
+                                                                t-if="property.state == 'available'">
+                                                                <span id="p_type"
+                                                                    style="text-transform: capitalize;"
+                                                                    class="badge badge-pill bg-info">
+                                                                    <t
+                                                                        t-esc="property.state" />
+                                                                </span>
+                                                            </t>
+
+                                                        </div>
+                                                        <br />
+
+                                                        <div class="d-flex border-top">
+                                                            <t t-if="property.parking != 0">
+                                                                <small
+                                                                    class="flex-fill text-center border-end py-2"><i
+                                                                        class="fa fa-stop text-primary me-2"></i><t
+                                                                        t-esc="property.bedroom" />
+                                                                    Parking</small>
+                                                            </t>
+                                                            <t t-if="property.parking == 0">
+                                                                <small
+                                                                    class="flex-fill text-center border-end py-2"><i
+                                                                        class="fa fa-ruler-combined text-primary me-2"></i>0
+                                                                    Parking</small>
+                                                            </t>
+                                                            <t t-if="property.bedroom != 0">
+                                                                <small
+                                                                    class="flex-fill text-center border-end py-2"><i
+                                                                        class="fa fa-bed text-primary me-2"></i><t
+                                                                        t-esc="property.bedroom" />
+                                                                    Bed</small>
+                                                            </t>
+                                                            <t t-if="property.bedroom == 0">
+                                                                <small
+                                                                    class="flex-fill text-center border-end py-2"><i
+                                                                        class="fa fa-bed text-primary me-2"></i>0
+                                                                    Bed</small>
+                                                            </t>
+
+                                                            <t t-if="property.bathroom != 0">
+                                                                <small
+                                                                    class="flex-fill text-center py-2"><i
+                                                                        class="fa fa-bath text-primary me-2"></i><t
+                                                                        t-esc="property.bathroom" />
+                                                                    Bath</small>
+                                                            </t>
+                                                            <t t-if="property.bathroom == 0">
+                                                                <small
+                                                                    class="flex-fill text-center py-2"><i
+                                                                        class="fa fa-bath text-primary me-2"></i>0
+                                                                    Bath</small>
+                                                            </t>
+
+                                                        </div>
+                                                        <a t-att-href="'/property/' + str(property.id)"
+                                                            style="border-radius: 0;"
+                                                            class="btn btn-primary py-2 px-3">See
+                                                            details</a>
+                                                    </div>
+
+                                                </div>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+
+                        <div id="tab-3" class="tab-pane fade show p-0">
+                            <div class="row g-4">
+                                <t t-foreach="property_ids" t-as="property">
+                                    <t t-if="property.state == 'available'">
+                                        <t t-if="property.sale_rent == 'for_tenancy'">
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp"
+                                        t-att-data-property_id="property.id">
+                                            <div class="card property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <t t-if="property.image">
+                                                        <img
+                                                            t-att-src="image_data_uri(property.image)"
+                                                            class="card-img-top"
+                                                            alt="..." />
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_sale'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Sale
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_tenancy'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Tenancy
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_auction'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Auction
+                                                        </div>
+                                                    </t>
+
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        <t t-esc="property.property_type" />
+                                                    </div>
+                                                </div>
+                                                <div class="p-4 pb-0">
+                                                    <h5 class="text-primary mb-3">
+                                                        <span t-esc="property.unit_price"
+                                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                    </h5>
+                                                    <p class="d-block h5 mb-2">
+                                                        <t t-esc="property.name" />
+                                                    </p>
+                                                    <p><i class="fa fa-map text-primary me-2"></i><t
+                                                            t-esc="property.street" />,<t
+                                                            t-esc="property.street2" />,<t
+                                                            t-esc="property.city" />, <t
+                                                            t-esc="property.state_id.name" />
+                                                <t
+                                                            t-esc="property.zip" /></p>
+                                                    <t t-if="property.state == 'sold'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-danger">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'for sale'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-success">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'for_rent'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-primary">
+                                                            <t
+                                                                t-esc="property.state.replace('_', ' ')" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'booked'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-warning">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'available'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-info">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+
+                                                </div>
+                                                <br />
+
+                                                <div class="d-flex border-top">
+                                                    <t t-if="property.parking != 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-stop text-primary me-2"></i><t
+                                                                t-esc="property.bedroom" /> Parking</small>
+                                                    </t>
+                                                    <t t-if="property.parking == 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-ruler-combined text-primary me-2"></i>0
+                                                            Parking</small>
+                                                    </t>
+                                                    <t t-if="property.bedroom != 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i><t
+                                                                t-esc="property.bedroom" /> Bed</small>
+                                                    </t>
+                                                    <t t-if="property.bedroom == 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i>0
+                                                            Bed</small>
+                                                    </t>
+
+                                                    <t t-if="property.bathroom != 0">
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i><t
+                                                                t-esc="property.bathroom" /> Bath</small>
+                                                    </t>
+                                                    <t t-if="property.bathroom == 0">
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i>0
+                                                            Bath</small>
+                                                    </t>
+
+                                                </div>
+                                                <a t-att-href="'/property/' + str(property.id)"
+                                                    style="border-radius: 0;"
+                                                    class="btn btn-primary py-2 px-3">See details</a>
+                                            </div>
+
+                                        </div>
+                                    </t>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                        
+                        <div id="tab-4" class="tab-pane fade show p-0">
+                            <div class="row g-4">
+                                <t t-foreach="property_ids" t-as="property">
+                                    <t t-if="property.state == 'available'">
+                                        <t t-if="property.sale_rent == 'for_auction'">
+                                        <div class="col-lg-4 col-md-6 wow fadeInUp"
+                                        t-att-data-property_id="property.id">
+                                            <div class="card property-item rounded overflow-hidden">
+                                                <div class="position-relative overflow-hidden">
+                                                    <t t-if="property.image">
+                                                        <img
+                                                            t-att-src="image_data_uri(property.image)"
+                                                            class="card-img-top"
+                                                            alt="..." />
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_sale'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Sale
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_tenancy'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Tenancy
+                                                        </div>
+                                                    </t>
+                                                    <t t-if="property.sale_rent == 'for_auction'">
+                                                        <div
+                                                            class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
+                                                            For Auction
+                                                        </div>
+                                                    </t>
+
+                                                    <div
+                                                        class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">
+                                                        <t t-esc="property.property_type" />
+                                                    </div>
+                                                </div>
+                                                <div class="p-4 pb-0">
+                                                    <h5 class="text-primary mb-3">
+                                                        <span t-esc="property.unit_price"
+                                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                    </h5>
+                                                    <p class="d-block h5 mb-2">
+                                                        <t t-esc="property.name" />
+                                                    </p>
+                                                    <p><i class="fa fa-map text-primary me-2"></i><t
+                                                            t-esc="property.street" />,<t
+                                                            t-esc="property.street2" />,<t
+                                                            t-esc="property.city" />, <t
+                                                            t-esc="property.state_id.name" />
+                                                <t
+                                                            t-esc="property.zip" /></p>
+                                                    <t t-if="property.state == 'sold'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-danger">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'for sale'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-success">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'for_rent'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-primary">
+                                                            <t
+                                                                t-esc="property.state.replace('_', ' ')" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'booked'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-warning">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+                                                    <t t-if="property.state == 'available'">
+                                                        <span id="p_type"
+                                                            style="text-transform: capitalize;"
+                                                            class="badge badge-pill bg-info">
+                                                            <t t-esc="property.state" />
+                                                        </span>
+                                                    </t>
+
+                                                </div>
+                                                <br />
+
+                                                <div class="d-flex border-top">
+                                                    <t t-if="property.parking != 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-stop text-primary me-2"></i><t
+                                                                t-esc="property.bedroom" /> Parking</small>
+                                                    </t>
+                                                    <t t-if="property.parking == 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-ruler-combined text-primary me-2"></i>0
+                                                            Parking</small>
+                                                    </t>
+                                                    <t t-if="property.bedroom != 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i><t
+                                                                t-esc="property.bedroom" /> Bed</small>
+                                                    </t>
+                                                    <t t-if="property.bedroom == 0">
+                                                        <small
+                                                            class="flex-fill text-center border-end py-2"><i
+                                                                class="fa fa-bed text-primary me-2"></i>0
+                                                            Bed</small>
+                                                    </t>
+
+                                                    <t t-if="property.bathroom != 0">
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i><t
+                                                                t-esc="property.bathroom" /> Bath</small>
+                                                    </t>
+                                                    <t t-if="property.bathroom == 0">
+                                                        <small class="flex-fill text-center py-2"><i
+                                                                class="fa fa-bath text-primary me-2"></i>0
+                                                            Bath</small>
+                                                    </t>
+
+                                                </div>
+                                                <a t-att-href="'/property/' + str(property.id)"
+                                                    style="border-radius: 0;"
+                                                    class="btn btn-primary py-2 px-3">See details</a>
+                                            </div>
+
+                                        </div>
+                                    </t>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </t>
+    </template>
+
+</odoo>
