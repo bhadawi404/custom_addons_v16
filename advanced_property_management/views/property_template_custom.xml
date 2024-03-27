@@ -81,7 +81,7 @@
                                                 <div class="p-4 pb-0">
                                                     <h5 class="text-primary mb-3">
                                                         <span t-esc="property.unit_price"
-                                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                            t-options="{'widget': 'monetary', 'display_currency': property.currency_id}" />
                                                     </h5>
                                                     <p class="d-block h5 mb-2">
                                                         <t t-esc="property.name" />
@@ -232,7 +232,7 @@
                                                         <div class="p-4 pb-0">
                                                             <h5 class="text-primary mb-3">
                                                                 <span t-esc="property.unit_price"
-                                                                    t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                                    t-options="{'widget': 'monetary', 'display_currency': property.currency_id}" />
                                                             </h5>
                                                             <p class="d-block h5 mb-2">
                                                                 <t t-esc="property.name" />
@@ -366,7 +366,7 @@
                                                 <div class="p-4 pb-0">
                                                     <h5 class="text-primary mb-3">
                                                         <span t-esc="property.unit_price"
-                                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                            t-options="{'widget': 'monetary', 'display_currency': property.currency_id}" />
                                                     </h5>
                                                     <p class="d-block h5 mb-2">
                                                         <t t-esc="property.name" />
@@ -510,7 +510,7 @@
                                                 <div class="p-4 pb-0">
                                                     <h5 class="text-primary mb-3">
                                                         <span t-esc="property.unit_price"
-                                                            t-options="{'widget': 'monetary', 'display_currency': website.currency_id}" />
+                                                            t-options="{'widget': 'monetary', 'display_currency': property.currency_id}" />
                                                     </h5>
                                                     <p class="d-block h5 mb-2">
                                                         <t t-esc="property.name" />
